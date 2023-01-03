@@ -1,10 +1,15 @@
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
+import Timeline from "./layouts/Timeline/Timeline";
 
-function App() {
+export default function App() {
+
   return (
-    <div className="App">
-     
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/timeline" exact element={<PrivateRoute><Timeline/></PrivateRoute>} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
-export default App;
