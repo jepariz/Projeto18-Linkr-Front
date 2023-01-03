@@ -1,11 +1,13 @@
 import styled from "styled-components";
 import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Header() {
     const [showSubMenu, setShowSubMenu] = useState(null);
     const refSubMenu = useRef(null);
     const refImage = useRef(null);
+    const navigate = useNavigate();
     
     function handleClickOutside (event) {
         if (refSubMenu.current && !refSubMenu.current.contains(event.target)) {
@@ -26,6 +28,11 @@ export default function Header() {
         };
     });
 
+    function logout() {
+        localStorage.clear();
+        navigate("/");
+    }
+
     return(
         <>
             <Head>
@@ -36,7 +43,7 @@ export default function Header() {
                 </Icons>
             </Head>
             <SubMenu ref={refSubMenu} show={showSubMenu}>
-                <p>Logout</p>
+                <p onClick={() => logout()}>Logout</p>
             </SubMenu>
         </>
     )
