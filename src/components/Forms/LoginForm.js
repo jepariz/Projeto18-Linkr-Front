@@ -1,40 +1,43 @@
-import styled from "styled-components";
 import axios from "axios";
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useState} from "react";
+import { Link, useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import { ThreeDots } from "react-loader-spinner";
+import {saveUserInfoInLocalStorage} from "../../utils/userLocalStorage"
 
-export default function RegisterForm(props) {
+export default function LoginForm(props) {
   const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
-  const [photo, setPhoto] = useState("");
   const [password, setPassword] = useState("");
-  const [registerOk, setRegisterOk] = useState(false);
-  const [register, setRegister] = useState(false);
+  const [login, setLogin] = useState(false);
+
   const navigate = useNavigate();
-
-  function handleRegister() {
-
+ 
+  function handleLogin() {
     const promise = axios.post(
-      "http://localhost:4000/signup",
+      "https://localhost:4000/signin",
       {
         email: email,
-        username: username,
-        photo: photo,
         password: password,
       }
     );
     promise.then((res) => {
-      setRegisterOk(true);
-      navigate("/");
+      console.log(res.data);
+
+      const info = {
+        token: res.data.token,
+        photoUrl: res.data.photo,
+        username: res.data.username
+      }
+      saveUserInfoInLocalStorage(info)
+      navigate("/hoje");
     });
 
     promise.catch((err) => {
       alert(err.response.data);
-      setRegister(false);
+      setLogin(false);
     });
 
-    setRegister(true);
+    setLogin(true);
   }
 
   return (
@@ -43,32 +46,18 @@ export default function RegisterForm(props) {
         <input
           type="email"
           placeholder="email"
-          disabled={register && !registerOk ? true : false}
+          disabled={login ? true : false}
           onChange={(e) => setEmail(e.target.value)}
           value={email}
         ></input>
         <input
           type="password"
           placeholder="password"
-          disabled={register && !registerOk ? true : false}
+          disabled={login ? true : false}
           onChange={(e) => setPassword(e.target.value)}
           value={password}
         ></input>
-        <input
-          type="text"
-          placeholder="username"
-          disabled={register && !registerOk ? true : false}
-          onChange={(e) => setUsername(e.target.value)}
-          value={username}
-        ></input>
-        <input
-          type="url"
-          placeholder="picture url"
-          disabled={register && !registerOk ? true : false}
-          onChange={(e) => setPhoto(e.target.value)}
-          value={photo}
-        ></input>
-         {register && !registerOk ? (
+         {login ? (
   <button>
     <ThreeDots
       height="70"
@@ -82,17 +71,15 @@ export default function RegisterForm(props) {
     />
   </button>
 ) : (
-  <button onClick={() => handleRegister()}>Sign Up</button>
+  <button onClick={() => handleLogin()}>Log In</button>
 )}
-        <Link to="/">
-          <p onClick={() => props.setChooseForm('login')}>Switch back to log in</p>
+        <Link to="/signup">
+          <p onClick={() => props.setChooseForm('signup')}>First time? Create an account!</p>
         </Link>
       </FormContainer>
     </RegisterFormContainer>
   );
 }
-
-
 
 const RegisterFormContainer = styled.div`
   width: 100%;

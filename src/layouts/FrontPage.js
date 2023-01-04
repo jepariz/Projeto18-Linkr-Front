@@ -1,8 +1,11 @@
 import styled from "styled-components";
 import RegisterForm from "../components/Forms/RegisterForm";
-
+import { useState } from "react";
+import LoginForm from "../components/Forms/LoginForm";
 
 export default function FrontPage() {
+
+  const [chooseForm, setChooseForm] = useState('login')
 
   return (
     <>
@@ -12,7 +15,7 @@ export default function FrontPage() {
             <p>save, share and discover <br></br>
             the best links on the web</p>
         </Message>
-        <RegisterForm/>
+        {chooseForm === 'login' ? <LoginForm setChooseForm={setChooseForm}/> : <RegisterForm setChooseForm={setChooseForm}/>}
     </RegisterContainer>
     
     </>

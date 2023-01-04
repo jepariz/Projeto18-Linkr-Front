@@ -10,6 +10,7 @@ export default function App() {
     <BrowserRouter>
       <GlobalStyle />
       <Routes>
+      <Route path="/" element={<FrontPage />} />
         <Route path="/signup" element={<FrontPage />} />
         <Route
           path="/timeline"
