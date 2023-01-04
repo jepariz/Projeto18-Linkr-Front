@@ -1,9 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import GlobalStyle from "./components/GlobalStyle";
-import Timeline from "./layouts/Timeline/Timeline";
+import Timeline from "./pages/Timeline/Timeline";
 import FrontPage from "./layouts/FrontPage";
-
 
 export default function App() {
   return (
