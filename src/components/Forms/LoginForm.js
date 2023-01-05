@@ -14,22 +14,22 @@ export default function LoginForm(props) {
  
   function handleLogin() {
     const promise = axios.post(
-      "https://localhost:4000/signin",
+      "http://localhost:4000/login",
       {
         email: email,
         password: password,
       }
     );
     promise.then((res) => {
-      console.log(res.data);
 
       const info = {
-        token: res.data.token,
-        photoUrl: res.data.photo,
-        username: res.data.username
+        token: res.data.jwtToken,
+        photoUrl: res.data.payload.photoUrl,
+        username: res.data.payload.username
       }
+
       saveUserInfoInLocalStorage(info)
-      navigate("/hoje");
+      navigate("/timeline");
     });
 
     promise.catch((err) => {
