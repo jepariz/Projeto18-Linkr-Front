@@ -52,3 +52,10 @@ export const Comment = styled.p`
   font-size: 16px;
   color: #b7b7b7;
 `;
+
+export const Like = styled.div`
+  width: 20px;
+  height: 40px;
+  margin: auto;
+  margin-top: 19px;
+`;
