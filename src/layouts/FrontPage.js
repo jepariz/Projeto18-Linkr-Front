@@ -14,6 +14,7 @@ export default function FrontPage() {
         </Message>
         <RegisterForm/>
     </RegisterContainer>
+    
     </>
   )
 }
@@ -26,6 +27,14 @@ display: grid;
 grid-template-columns: 1.5fr 1fr;
 align-items: center;
 justify-content: center;
+
+@media(max-width: 375px) {
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color:  #333333;
+  }
 `
 const Message = styled.div`
 
@@ -43,5 +52,24 @@ p{
     font-family: 'Oswald', sans-serif;
     color: #FFFFFF;
 }
+
+@media(max-width: 375px) {
+  padding: 30px;
+  box-sizing: border-box;
+  text-align: center;
+  width: 100%;
+  height: 175px;
+  background-color:#151515;
+  box-shadow: 0px 4px 4px 0px #00000040;
+
+    h1{
+      font-size: 76px;
+    }
+
+    p{
+      font-size: 23px;
+    }
+  }
+
 `
 

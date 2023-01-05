@@ -101,6 +101,7 @@ const RegisterFormContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+
 `;
 const FormContainer = styled.div`
   display: flex;
@@ -155,5 +156,17 @@ const FormContainer = styled.div`
     font-size: 20px;
     color: #fff;
     place-self: center;
+  }
+
+  @media(max-width: 375px) {
+
+    height: 80%;
+    
+    input, button{
+    width: 330px;
+    height: 55px;
+    }
+
+
   }
 `;
