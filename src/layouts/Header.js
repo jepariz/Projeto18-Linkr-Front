@@ -84,7 +84,8 @@ const Icons = styled.div`
   width: 90px;
   cursor: pointer;
   img {
-    width: 55px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
   }
 `;
