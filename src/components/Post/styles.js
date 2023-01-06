@@ -57,3 +57,10 @@ export const ContainerIcons = styled.div`
     cursor: pointer;
   }
 `;
+
+export const Like = styled.div`
+  width: 20px;
+  height: 40px;
+  margin: auto;
+  margin-top: 19px;
+`;
