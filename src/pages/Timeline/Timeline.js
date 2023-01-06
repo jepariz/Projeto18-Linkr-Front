@@ -7,7 +7,8 @@ import { Container, Loading, PageTitle, PostList } from "./styles";
 
 export default function Timeline() {
   const [posts, setPosts] = useState([]);
-  useEffect(() => {
+
+  function loadPosts() {
     getLast20Posts()
       .then(({ data }) => {
         setPosts(() => data);
@@ -20,6 +21,10 @@ export default function Timeline() {
           "An error occured while trying to fetch the posts, please refresh the page"
         )
       );
+  }
+
+  useEffect(() => {
+    loadPosts();
   }, []);
 
   return (
@@ -31,7 +36,9 @@ export default function Timeline() {
           {posts.length === 0 ? (
             <Loading src="https://yorkdalelincoln.com/wp-content/themes/lbx-iag/resources/images/spinner.gif" />
           ) : (
-            posts.map((post) => <Post key={post.id} data={post} />)
+            posts.map((post) => (
+              <Post key={post.id} data={post} load={loadPosts} />
+            ))
           )}
         </PostList>
       </Container>

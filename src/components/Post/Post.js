@@ -13,10 +13,11 @@ import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { useEffect, useState } from "react";
 import Comment from "./Comment/Comment";
 import axios from "axios";
+import ModalDeletePost from "./ModalDeletePost/ModalDeletePost";
 
-export default function Post({ data }) {
+export default function Post({ data, load }) {
   const { id, photo, username, link, text, title, image, description } = data;
-
+  const [openModal, setOpenModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
 
   function handleEditMode() {
@@ -24,7 +25,6 @@ export default function Post({ data }) {
   }
 
   function isAuthenticatedUserPost() {
-    console.log(JSON.parse(localStorage.user).username === username);
     return JSON.parse(localStorage.user).username === username;
   }
 
@@ -101,7 +101,17 @@ export default function Post({ data }) {
             onClick={() => handleEditMode()}
             color="#fff"
           />
+          <FaTrashAlt
+            fontSize={15}
+            onClick={() => setOpenModal(true)}
+            color="#fff"
+          />
         </ContainerIcons>
+      ) : (
+        ""
+      )}
+      {openModal ? (
+        <ModalDeletePost id={id} reload={load} setOpen={setOpenModal} />
       ) : (
         ""
       )}
