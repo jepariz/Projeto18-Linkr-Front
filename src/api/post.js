@@ -1,9 +1,9 @@
 import axios from "axios";
-const URL = "http://localhost:4000/post/";
+const URL = "http://localhost:4000";
 
 export function updatePostById({ id, comment }) {
   return axios.put(
-    URL + id,
+    URL + "/post/" + id,
     {
       comment,
     },
@@ -15,8 +15,24 @@ export function updatePostById({ id, comment }) {
   );
 }
 
+export function getUserPosts(id) {
+  return axios.get(URL + "/user/" + id, {
+    headers: {
+      Authorization: `Bearer ${JSON.parse(localStorage.user).token}`,
+    },
+  });
+}
+
+export function getUser() {
+  return axios.get(URL + "/user", {
+    headers: {
+      Authorization: `Bearer ${JSON.parse(localStorage.user).token}`,
+    },
+  });
+}
+
 export function deletePostById(id) {
-  return axios.delete(URL + id, {
+  return axios.delete(URL + "/post/" + id, {
     headers: {
       Authorization: `Bearer ${JSON.parse(localStorage.user).token}`,
     },
