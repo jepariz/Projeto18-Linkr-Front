@@ -45,3 +45,15 @@ export const SubContainer = styled.div`
 `;
 
 export const LeftContainer = styled.div``;
+
+export const ZeroPost = styled.div`
+  width: 100%;
+  background-color: #171717;
+  border-radius: 15px;
+  padding: 15px 15px;
+  font-family: "Oswald";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 27px;
+  color: #ffffff;
+`;
