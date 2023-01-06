@@ -5,13 +5,16 @@ import { CommentInput, CommentText, Container } from "./styles";
 export default function Comment({ text, id, editModeState }) {
   const [editMode, setEditMode] = editModeState;
   const [inputValue, setInputValue] = useState(text);
+  const [paragraphText, setParagraphText] = useState(text);
   const [inputDisabled, setInputDisabled] = useState(false);
   const inputRef = useRef(null);
 
   function handleCommentInput(e) {
-    if (e.keyCode === 13 && text !== inputValue.trim()) {
+    if (e.keyCode === 13) {
       updateComment({ id, comment: inputValue.trim() });
     }
+
+    if (e.keyCode === 27) setEditMode(false);
   }
 
   function updateComment({ id, comment }) {
@@ -20,6 +23,7 @@ export default function Comment({ text, id, editModeState }) {
       .then(() => {
         setEditMode(false);
         setInputDisabled(false);
+        setParagraphText(comment);
       })
       .catch((error) => {
         setInputDisabled(false);
@@ -28,7 +32,9 @@ export default function Comment({ text, id, editModeState }) {
   }
 
   useEffect(() => {
-    if (editMode && inputRef.current) inputRef.current.focus();
+    if (editMode && inputRef.current) {
+      inputRef.current.focus();
+    }
   }, [editMode]);
 
   return (
@@ -43,7 +49,7 @@ export default function Comment({ text, id, editModeState }) {
           ref={inputRef}
         />
       ) : (
-        <CommentText>{inputValue}</CommentText>
+        <CommentText>{paragraphText}</CommentText>
       )}
     </Container>
   );
