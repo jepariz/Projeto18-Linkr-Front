@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { ReactTagify } from "react-tagify";
 import { updatePostById } from "../../../api/post";
 import { CommentInput, CommentText, Container } from "./styles";
 
@@ -8,6 +9,15 @@ export default function Comment({ text, id, editModeState }) {
   const [paragraphText, setParagraphText] = useState(text);
   const [inputDisabled, setInputDisabled] = useState(false);
   const inputRef = useRef(null);
+
+  const regex = /#[a-z\d]+/ig;
+  const hashtags = paragraphText.match(regex);
+  
+  const tagStyle ={
+    color: 'white',
+    fontWeight: 700,
+    cursor: 'pointer'
+  }
 
   function handleCommentInput(e) {
     if (e.keyCode === 13) {
@@ -49,7 +59,7 @@ export default function Comment({ text, id, editModeState }) {
           ref={inputRef}
         />
       ) : (
-        <CommentText>{paragraphText}</CommentText>
+        <CommentText><ReactTagify tag={hashtags}  tagStyle={tagStyle}>{paragraphText}</ReactTagify></CommentText>
       )}
     </Container>
   );
