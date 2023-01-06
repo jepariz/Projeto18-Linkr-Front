@@ -16,19 +16,18 @@ import axios from "axios";
 export default function Post({ data }) {
   const { id, photo, username, link, text, title, image, description } = data;
 
-  const regex = /#[a-z\d]+/ig;
+  const regex = /#[a-z\d]+/gi;
   const hashtags = text.match(regex);
-  
-  const tagStyle ={
-    color: 'white',
+
+  const tagStyle = {
+    color: "white",
     fontWeight: 700,
-    cursor: 'pointer'
-  }
+    cursor: "pointer",
+  };
 
   let post_id = id;
 
   const [isLiked, setIsLiked] = useState(false);
-  console.log("testeteste", id);
 
   useEffect(() => {
     axios
@@ -41,10 +40,8 @@ export default function Post({ data }) {
       .catch((e) => console.log(e.response.data.message));
   }, []);
 
-
   function likePost() {
     if (isLiked) {
-      console.log("tirar o like");
       axios
         .delete("http://localhost:4000/unlike/" + post_id, {
           headers: {
@@ -91,7 +88,11 @@ export default function Post({ data }) {
       </LeftContainer>
       <RightContainer>
         <Username>{username}</Username>
-        <Comment><ReactTagify tag={hashtags}  tagStyle={tagStyle}>{text}</ReactTagify></Comment>
+        <Comment>
+          <ReactTagify tag={hashtags} tagStyle={tagStyle}>
+            {text}
+          </ReactTagify>
+        </Comment>
         <UrlPreview data={{ link, title, image, description }} />
       </RightContainer>
     </Container>
