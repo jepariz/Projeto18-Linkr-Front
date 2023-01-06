@@ -1,9 +1,10 @@
 import axios from "axios";
 import { useState } from "react";
 import styled from "styled-components";
+import { getTrending } from "../../api/trending";
 import getPosts from "../../components/Post/getPosts";
 
-export default function CreatePost({ setPosts }) {
+export default function CreatePost({ setPosts, setTrending }) {
   const [link, setLink] = useState("");
   const [text, setText] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
@@ -12,14 +13,11 @@ export default function CreatePost({ setPosts }) {
     e.preventDefault();
     setIsProcessing(true);
 
-    const regex = /#[a-z\d]+/gi;
-    const hashtags = text.match(regex);
-
     const URL = "http://localhost:4000/post";
     axios
       .post(
         URL,
-        { link, text, hashtags},
+        { link, text },
         {
           headers: {
             Authorization: `Bearer ${JSON.parse(localStorage.user).token}`,
@@ -31,6 +29,7 @@ export default function CreatePost({ setPosts }) {
         setText("");
         setIsProcessing(false);
         getPosts(setPosts);
+        getTrending(setTrending);
       })
       .catch(() => {
         alert("Houve um erro ao publicar seu link");
@@ -96,7 +95,7 @@ const Container = styled.div`
   padding: 20px;
   background-color: white;
   display: flex;
-  margin-top: 45px;
+  margin-top: 40px;
   gap: 20px;
   @media (min-width: 1024px) {
     border-radius: 15px;
