@@ -5,7 +5,15 @@ import getPosts from "../../components/Post/getPosts";
 import Post from "../../components/Post/Post";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 import Trending from "../../layouts/Trending";
-import { Container, LeftContainer, Loading, PageTitle, PostList, SubContainer, ZeroPost } from "../Timeline/styles";
+import {
+  Container,
+  LeftContainer,
+  Loading,
+  PageTitle,
+  PostList,
+  SubContainer,
+  ZeroPost,
+} from "../Timeline/styles";
 
 export default function Hashtag() {
   const [posts, setPosts] = useState([]);
@@ -18,13 +26,15 @@ export default function Hashtag() {
   }, [hashtag]);
 
   const renderPosts = [];
-  if(loading) {
-    renderPosts.push(<Loading src="https://yorkdalelincoln.com/wp-content/themes/lbx-iag/resources/images/spinner.gif" />)
+  if (loading) {
+    renderPosts.push(
+      <Loading src="https://yorkdalelincoln.com/wp-content/themes/lbx-iag/resources/images/spinner.gif" />
+    );
   } else {
-    if(posts.length === 0) {
-        renderPosts.push(<ZeroPost>Não há post a ser mostrado!</ZeroPost>)
+    if (posts.length === 0) {
+      renderPosts.push(<ZeroPost>Não há post a ser mostrado!</ZeroPost>);
     } else {
-        posts.map((post) => renderPosts.push(<Post key={post.id} data={post} />))
+      posts.map((post) => renderPosts.push(<Post key={post.id} data={post} />));
     }
   }
 
@@ -34,9 +44,7 @@ export default function Hashtag() {
         <PageTitle># {hashtag}</PageTitle>
         <SubContainer>
           <LeftContainer>
-            <PostList>
-              {renderPosts}
-            </PostList>
+            <PostList>{renderPosts}</PostList>
           </LeftContainer>
           <Trending trending={trending} />
         </SubContainer>
