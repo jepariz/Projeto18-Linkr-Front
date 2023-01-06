@@ -2,28 +2,30 @@ import {
   Container,
   LeftContainer,
   Photo,
-  Comment,
   Username,
   RightContainer,
+  ContainerIcons,
   Like,
 } from "./styles";
 import UrlPreview from "./UrlPreview/UrlPreview";
-import { ReactTagify } from "react-tagify";
+import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { useEffect, useState } from "react";
+import Comment from "./Comment/Comment";
 import axios from "axios";
 
 export default function Post({ data }) {
   const { id, photo, username, link, text, title, image, description } = data;
 
-  const regex = /#[a-z\d]+/gi;
-  const hashtags = text.match(regex);
+  const [editMode, setEditMode] = useState(false);
 
-  const tagStyle = {
-    color: "white",
-    fontWeight: 700,
-    cursor: "pointer",
-  };
+  function handleEditMode() {
+    setEditMode(!editMode);
+  }
+
+  function isAuthenticatedUserPost() {
+    return JSON.parse(localStorage.user).username === username;
+  }
 
   let post_id = id;
 
@@ -88,13 +90,20 @@ export default function Post({ data }) {
       </LeftContainer>
       <RightContainer>
         <Username>{username}</Username>
-        <Comment>
-          <ReactTagify tag={hashtags} tagStyle={tagStyle}>
-            {text}
-          </ReactTagify>
-        </Comment>
+        <Comment editModeState={[editMode, setEditMode]} text={text} id={id} />
         <UrlPreview data={{ link, title, image, description }} />
       </RightContainer>
+      {isAuthenticatedUserPost() ? (
+        <ContainerIcons>
+          <FaPencilAlt
+            fontSize={15}
+            onClick={() => handleEditMode()}
+            color="#fff"
+          />
+        </ContainerIcons>
+      ) : (
+        ""
+      )}
     </Container>
   );
 }

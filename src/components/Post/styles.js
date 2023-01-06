@@ -10,6 +10,7 @@ export const Container = styled.div`
   @media (min-width: 1024px) {
     border-radius: 15px;
   }
+  position: relative;
 `;
 
 export const LeftContainer = styled.div`
@@ -45,12 +46,16 @@ export const Username = styled.h1`
   color: #ffffff;
 `;
 
-export const Comment = styled.p`
-  font-family: "Lato";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  color: #b7b7b7;
+export const ContainerIcons = styled.div`
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  display: flex;
+  gap: 15px;
+
+  > * {
+    cursor: pointer;
+  }
 `;
 
 export const Like = styled.div`
