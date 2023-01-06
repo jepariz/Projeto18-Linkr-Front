@@ -7,10 +7,20 @@ import {
   RightContainer,
 } from "./styles";
 import UrlPreview from "./UrlPreview/UrlPreview";
+import { ReactTagify } from "react-tagify";
 
 export default function Post({ data }) {
   const { id, photo, username, link, text, title, image, description } = data;
-  console.log(image);
+
+  const regex = /#[a-z\d]+/ig;
+  const hashtags = text.match(regex);
+  
+  const tagStyle ={
+    color: 'white',
+    fontWeight: 700,
+    cursor: 'pointer'
+  }
+ 
   return (
     <Container>
       <LeftContainer>
@@ -18,7 +28,7 @@ export default function Post({ data }) {
       </LeftContainer>
       <RightContainer>
         <Username>{username}</Username>
-        <Comment>{text}</Comment>
+        <Comment><ReactTagify tag={hashtags}  tagStyle={tagStyle}>{text}</ReactTagify></Comment>
         <UrlPreview data={{ link, title, image, description }} />
       </RightContainer>
     </Container>
