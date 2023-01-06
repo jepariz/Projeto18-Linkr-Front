@@ -1,9 +1,19 @@
 import { useEffect, useState } from "react";
 import { getLast20Posts } from "../../api/timeline";
+import { getTrending } from "../../api/trending";
+import getPosts from "../../components/Post/getPosts";
 import Post from "../../components/Post/Post";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
+import Trending from "../../layouts/Trending";
 import CreatePost from "./CreatePost";
-import { Container, Loading, PageTitle, PostList } from "./styles";
+import {
+  Container,
+  LeftContainer,
+  Loading,
+  PageTitle,
+  PostList,
+  SubContainer,
+} from "./styles";
 
 export default function Timeline() {
   const [posts, setPosts] = useState([]);
@@ -21,19 +31,29 @@ export default function Timeline() {
         )
       );
   }, []);
+  const [trending, setTrending] = useState([]);
+  useEffect(() => {
+    getPosts(setPosts);
+    getTrending(setTrending);
+  }, []);
 
   return (
     <MainLayout>
       <Container>
         <PageTitle>timeline</PageTitle>
-        <CreatePost setPosts={setPosts} />
-        <PostList>
-          {posts.length === 0 ? (
-            <Loading src="https://yorkdalelincoln.com/wp-content/themes/lbx-iag/resources/images/spinner.gif" />
-          ) : (
-            posts.map((post) => <Post key={post.id} data={post} />)
-          )}
-        </PostList>
+        <SubContainer>
+          <LeftContainer>
+            <CreatePost setPosts={setPosts} setTrending={setTrending} />
+            <PostList>
+              {posts.length === 0 ? (
+                <Loading src="https://yorkdalelincoln.com/wp-content/themes/lbx-iag/resources/images/spinner.gif" />
+              ) : (
+                posts.map((post) => <Post key={post.id} data={post} />)
+              )}
+            </PostList>
+          </LeftContainer>
+          <Trending trending={trending} />
+        </SubContainer>
       </Container>
     </MainLayout>
   );

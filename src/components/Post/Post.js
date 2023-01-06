@@ -9,7 +9,6 @@ import {
 } from "./styles";
 import UrlPreview from "./UrlPreview/UrlPreview";
 import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
-import { ReactTagify } from "react-tagify";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { useEffect, useState } from "react";
 import Comment from "./Comment/Comment";
@@ -25,16 +24,7 @@ export default function Post({ data }) {
   }
 
   function isAuthenticatedUserPost() {
-
     return JSON.parse(localStorage.user).username === username;
-  }
-  const regex = /#[a-z\d]+/ig;
-  const hashtags = text.match(regex);
-  
-  const tagStyle ={
-    color: 'white',
-    fontWeight: 700,
-    cursor: 'pointer'
   }
 
   let post_id = id;
@@ -51,7 +41,6 @@ export default function Post({ data }) {
       .then((e) => setIsLiked(e.data.liked))
       .catch((e) => console.log(e.response.data.message));
   }, []);
-
 
   function likePost() {
     if (isLiked) {
@@ -101,7 +90,7 @@ export default function Post({ data }) {
       </LeftContainer>
       <RightContainer>
         <Username>{username}</Username>
-        <Comment editModeState={[editMode, setEditMode]} text={text}  id={id} />
+        <Comment editModeState={[editMode, setEditMode]} text={text} id={id} />
         <UrlPreview data={{ link, title, image, description }} />
       </RightContainer>
       {isAuthenticatedUserPost() ? (
