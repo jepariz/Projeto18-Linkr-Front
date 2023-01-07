@@ -13,19 +13,7 @@ export function updatePostById({ id, comment }) {
 }
 
 export function getUserPosts(id) {
-  return axios.get(URL + "/user/" + id, {
-    headers: {
-      Authorization: `Bearer ${JSON.parse(localStorage.user).token}`,
-    },
-  });
-}
-
-export function getUser() {
-  return axios.get(URL + "/user", {
-    headers: {
-      Authorization: `Bearer ${JSON.parse(localStorage.user).token}`,
-    },
-  });
+  return axios.get(`${URL}/user/${id}`, headers);
 }
 
 export function deletePostById(id) {
