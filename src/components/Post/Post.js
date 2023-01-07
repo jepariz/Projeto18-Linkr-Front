@@ -15,6 +15,7 @@ import {
   PhotoLikeGroup,
 } from "./Post.style";
 import UrlMetadata from "./UrlMetadata/UrlMetadata";
+import { ReactTagify } from "react-tagify";
 
 export default function Post({ data, reload }) {
   const { id, photo, username, link, text, title, image, description } = data;
