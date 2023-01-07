@@ -1,23 +1,23 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ReactTagify } from "react-tagify";
-import { updatePostById } from "../../../api/post";
-import { CommentInput, CommentText, Container } from "./styles";
+import {
+  CommentContainer,
+  CommentInput,
+  CommentParagraph,
+} from "./Comment.style";
 
 
-export default function Comment({ text, id, editModeState }) {
+export default function Comment({ text, editModeState, update }) {
   const [editMode, setEditMode] = editModeState;
-  const [inputValue, setInputValue] = useState(text);
+  const [value, setValue] = useState(text);
   const [paragraphText, setParagraphText] = useState(text);
-  const [inputDisabled, setInputDisabled] = useState(false);
-  const inputRef = useRef(null);
-
-
-  const regex = /#[a-z\d]+/ig;
+  const [disabled, setDisabled] = useState(false);
+  const regex = /#[a-z\d]+/gi;
   const hashtags = paragraphText.match(regex);
-  
-  const tagStyle ={
-    color: 'white',
+
+  const tagStyle = {
+    color: "white",
     fontWeight: 700,
     cursor: 'pointer'
   }
@@ -35,9 +35,21 @@ export default function Comment({ text, id, editModeState }) {
     navigate(`/hashtag/${hash}`);
   }
 
-  function handleCommentInput(e) {
+  function handleKeyDown(e) {
+    const newValue = value.trim();
     if (e.keyCode === 13) {
-      updateComment({ id, comment: inputValue.trim() });
+      setDisabled((d) => true);
+      update(
+        { comment: newValue },
+        () => {
+          setEditMode(false);
+          setParagraphText(newValue);
+        },
+        () => setDisabled((d) => false)
+      );
+    } else if (e.keyCode === 27) {
+      setEditMode(false);
+      setValue(newValue);
     }
 
     if (e.keyCode === 27) setEditMode(false);
@@ -58,26 +70,18 @@ export default function Comment({ text, id, editModeState }) {
       });
   }
 
-  useEffect(() => {
-    if (editMode && inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, [editMode]);
-
   return (
-    <Container>
+    <CommentContainer>
       {editMode ? (
         <CommentInput
-          disabled={inputDisabled}
-          contenteditable
-          value={inputValue}
-          onKeyDown={handleCommentInput}
-          onChange={(e) => setInputValue(e.target.value)}
-          ref={inputRef}
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          onKeyDown={handleKeyDown}
+          disabled={disabled}
         />
       ) : (
         <CommentText><ReactTagify tag={hashtags}  tagClicked={(tag) => handleTagClick(tag)} tagStyle={tagStyle}>{paragraphText}</ReactTagify></CommentText>
       )}
-    </Container>
+    </CommentContainer>
   );
 }

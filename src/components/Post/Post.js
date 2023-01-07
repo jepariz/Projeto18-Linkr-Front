@@ -1,32 +1,55 @@
-import {
-  Container,
-  LeftContainer,
-  Photo,
-  Username,
-  RightContainer,
-  ContainerIcons,
-  Like,
-} from "./styles";
-import UrlPreview from "./UrlPreview/UrlPreview";
-import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { useEffect, useState } from "react";
 import Comment from "./Comment/Comment";
 import axios from "axios";
+import { deletePostById, updatePostById } from "../../api/post";
+import DeleteButton from "./DeleteButton/DeleteButton";
+import EditButton from "./EditButton/EditButton";
+import ModalDelete from "../ModalDelete/ModalDelete";
+import {
+  Photo,
+  PostContainer,
+  Username,
+  ButtonsGroup,
+  Like,
+  PhotoLikeGroup,
+} from "./Post.style";
+import UrlMetadata from "./UrlMetadata/UrlMetadata";
 import { ReactTagify } from "react-tagify";
 
-export default function Post({ data }) {
+export default function Post({ data, reload }) {
   const { id, photo, username, link, text, title, image, description } = data;
-
-  const [editMode, setEditMode] = useState(false);
-
-  function handleEditMode() {
-    setEditMode(!editMode);
-  }
+  const editMode = useState(false);
+  const deleteMode = useState(false);
 
   function isAuthenticatedUserPost() {
     return JSON.parse(localStorage.user).username === username;
   }
+
+  function updatePost({ comment }, sucessFn, errorFn) {
+    updatePostById({ id, comment })
+      .then(() => {
+        sucessFn();
+      })
+      .catch((error) => {
+        alert("NÃO FOI POSSIVEL ALTERAR O POST");
+        errorFn();
+      });
+  }
+
+  function deletePost(sucessFn, errorFn) {
+    deletePostById(id)
+      .then(() => {
+        reload();
+        sucessFn();
+      })
+      .catch((error) => {
+        alert("NAO FOI POSSIVEL DELETAR");
+        errorFn();
+      });
+  }
+
+  // LIKE
 
   let post_id = id;
 
@@ -77,9 +100,10 @@ export default function Post({ data }) {
     }
   }
 
+  // RENDER
   return (
-    <Container>
-      <LeftContainer>
+    <PostContainer>
+      <PhotoLikeGroup>
         <Photo src={photo} />
         <Like onClick={() => likePost()}>
           {isLiked ? (
@@ -88,23 +112,20 @@ export default function Post({ data }) {
             <AiOutlineHeart fontSize={22} color={"#fff"} />
           )}
         </Like>
-      </LeftContainer>
-      <RightContainer>
-        <Username>{username}</Username>
-        <Comment editModeState={[editMode, setEditMode]} text={text} id={id}/>
-        <UrlPreview data={{ link, title, image, description }} />
-      </RightContainer>
+      </PhotoLikeGroup>
+      <Username>{username} </Username>
       {isAuthenticatedUserPost() ? (
-        <ContainerIcons>
-          <FaPencilAlt
-            fontSize={15}
-            onClick={() => handleEditMode()}
-            color="#fff"
-          />
-        </ContainerIcons>
+        <ButtonsGroup>
+          <EditButton editModeState={editMode} />
+          <DeleteButton deleteModeState={deleteMode} />
+        </ButtonsGroup>
       ) : (
         ""
       )}
-    </Container>
+
+      <Comment text={text} editModeState={editMode} update={updatePost} />
+      <UrlMetadata data={{ link, title, image, description }} />
+      <ModalDelete deletePost={deletePost} deleteModeState={deleteMode} />
+    </PostContainer>
   );
 }

@@ -6,7 +6,6 @@ import { getTrending } from "../../api/trending";
 import getPosts from "../../components/Post/getPosts";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 import Trending from "../../layouts/Trending";
-import CreatePost from "./CreatePost";
 import {
   Container,
   LeftContainer,
@@ -14,14 +13,17 @@ import {
   PostList,
   SubContainer,
 } from "./styles";
+import { getUserPosts } from "../../api/post";
+import { useParams } from "react-router-dom";
 
-export default function Timeline() {
+export default function UserPosts() {
+  let { id } = useParams();
   const [posts, setPosts] = useState([]);
   const [timelinePostsStep, setTimelinePostsStep] = useState(0);
 
   function loadPosts() {
     setTimelinePostsStep(0);
-    getLast20Posts()
+    getUserPosts(id)
       .then(({ data }) => {
         setPosts(() => data);
         if (data.length === 0) {
@@ -39,9 +41,10 @@ export default function Timeline() {
   useEffect(() => {
     loadPosts();
   }, []);
+
   const [trending, setTrending] = useState([]);
+
   useEffect(() => {
-    getPosts(setPosts);
     getTrending(setTrending);
   }, []);
 
@@ -51,7 +54,6 @@ export default function Timeline() {
         <SubContainer>
           <LeftContainer>
             <PageTitle>timeline</PageTitle>
-            <CreatePost setPosts={setPosts} />
             <PostList>
               {
                 [

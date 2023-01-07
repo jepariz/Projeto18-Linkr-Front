@@ -1,7 +1,11 @@
 import { getPostsByHashtag } from "../../api/hashtag";
 import { getLast20Posts } from "../../api/timeline";
 
-export default function getPosts(setPosts, setLoading=() => {}, hashtag = "") {
+export default function getPosts(
+  setPosts,
+  setLoading = () => {},
+  hashtag = ""
+) {
   if (hashtag === "") {
     getLast20Posts()
       .then(({ data }) => {
@@ -19,13 +23,13 @@ export default function getPosts(setPosts, setLoading=() => {}, hashtag = "") {
     setLoading(true);
     getPostsByHashtag(hashtag)
       .then(({ data }) => {
-      setPosts(() => data);
-      setLoading(false);
-    })
-    .catch((error) =>
-      alert(
-        "An error occured while trying to fetch the posts, please refresh the page"
-      )
-    );
+        setPosts(() => data);
+        setLoading(false);
+      })
+      .catch((error) =>
+        alert(
+          "An error occured while trying to fetch the posts, please refresh the page"
+        )
+      );
   }
 }

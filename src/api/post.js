@@ -1,16 +1,25 @@
 import axios from "axios";
+import { headers } from "../utils/token";
+const URL = "http://localhost:4000";
 
 export function updatePostById({ id, comment }) {
-  const URL = "http://localhost:4000/post/";
   return axios.put(
-    URL + id,
+    `${URL}/post/${id}`,
     {
       comment,
     },
-    {
-      headers: {
-        Authorization: `Bearer ${JSON.parse(localStorage.user).token}`,
-      },
-    }
+    headers
   );
+}
+
+export function getUserPosts(id) {
+  return axios.get(`${URL}/user/${id}`, headers);
+}
+
+export function deletePostById(id) {
+  return axios.delete(URL + "/post/" + id, {
+    headers: {
+      Authorization: `Bearer ${JSON.parse(localStorage.user).token}`,
+    },
+  });
 }

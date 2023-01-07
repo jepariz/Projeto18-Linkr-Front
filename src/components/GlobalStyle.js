@@ -55,6 +55,51 @@ table {
 	box-sizing: border-box;
 }
 
+.modal-overlay  {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	border: none;
+	border-radius: 0;
+	box-shadow: none;
+	background: rgba(255, 255, 255, .9);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	outline: none;
+	z-index: 99999;
+}
+
+.modal-content {
+	width: 90%;
+	max-width: 600px;
+	position: relative;
+	background: #333333;
+	padding: 40px 0;
+	display: flex;
+	flex-direction: column;
+	gap: 60px;
+	border-radius: 50px;
+	align-items: center;
+	justify-content: center;
+	z-index: 99999;
+}
+
+.loading {
+	background: linear-gradient(110deg, #d1d1d1 9%, #ececec 18%, #d1d1d1 33%);
+  	animation: 1.5s shine linear infinite;
+  	background-size: 200% 100%;
+}
+
+@keyframes shine {
+  to {
+    background-position-x: -200%;
+  }
+}
+
+
 `;
 
 export default GlobalStyle;

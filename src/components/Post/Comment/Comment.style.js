@@ -1,14 +1,9 @@
 import styled from "styled-components";
 
-export const Container = styled.div``;
-
-export const CommentText = styled.p`
-  font-family: "Lato";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 17px;
-  line-height: 20px;
-  color: #b7b7b7;
+export const CommentContainer = styled.div`
+  display: flex;
+  grid-column: 2/4;
+  grid-row: 2/3;
 `;
 
 export const CommentInput = styled.textarea`
@@ -21,13 +16,18 @@ export const CommentInput = styled.textarea`
   font-weight: 400;
   font-size: 14px;
   color: #4c4c4c;
-  padding: 5px 10px;
+  padding: 10px;
   outline: none;
   border: none;
   resize: none;
-  &&[contenteditable] {
-    border: 1px solid black;
-    max-height: 200px;
-    overflow: auto;
-  }
+  color: #4c4c4c;
+`;
+
+export const CommentParagraph = styled.div`
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 18px;
+  color: #b7b7b7;
 `;
