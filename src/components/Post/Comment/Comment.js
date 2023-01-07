@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ReactTagify } from "react-tagify";
 import { updatePostById } from "../../../api/post";
 import { CommentInput, CommentText, Container } from "./styles";
+
 
 export default function Comment({ text, id, editModeState }) {
   const [editMode, setEditMode] = editModeState;
@@ -9,6 +11,7 @@ export default function Comment({ text, id, editModeState }) {
   const [paragraphText, setParagraphText] = useState(text);
   const [inputDisabled, setInputDisabled] = useState(false);
   const inputRef = useRef(null);
+
 
   const regex = /#[a-z\d]+/ig;
   const hashtags = paragraphText.match(regex);
@@ -19,6 +22,19 @@ export default function Comment({ text, id, editModeState }) {
     cursor: 'pointer'
   }
 
+  const navigate = useNavigate();
+
+  function handleTagClick (tag){
+
+    const hash = tag.trim().split('#')
+    
+    if (hash[0] === '') {
+      hash.shift();
+    }
+
+    navigate(`/hashtag/${hash}`);
+  }
+
   function handleCommentInput(e) {
     if (e.keyCode === 13) {
       updateComment({ id, comment: inputValue.trim() });
@@ -26,6 +42,7 @@ export default function Comment({ text, id, editModeState }) {
 
     if (e.keyCode === 27) setEditMode(false);
   }
+
 
   function updateComment({ id, comment }) {
     setInputDisabled(true);
@@ -59,7 +76,7 @@ export default function Comment({ text, id, editModeState }) {
           ref={inputRef}
         />
       ) : (
-        <CommentText><ReactTagify tag={hashtags}  tagStyle={tagStyle}>{paragraphText}</ReactTagify></CommentText>
+        <CommentText><ReactTagify tag={hashtags}  tagClicked={(tag) => handleTagClick(tag)} tagStyle={tagStyle}>{paragraphText}</ReactTagify></CommentText>
       )}
     </Container>
   );

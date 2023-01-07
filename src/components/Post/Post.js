@@ -13,6 +13,7 @@ import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { useEffect, useState } from "react";
 import Comment from "./Comment/Comment";
 import axios from "axios";
+import { ReactTagify } from "react-tagify";
 
 export default function Post({ data }) {
   const { id, photo, username, link, text, title, image, description } = data;
@@ -90,7 +91,7 @@ export default function Post({ data }) {
       </LeftContainer>
       <RightContainer>
         <Username>{username}</Username>
-        <Comment editModeState={[editMode, setEditMode]} text={text} id={id} />
+        <Comment editModeState={[editMode, setEditMode]} text={text} id={id}/>
         <UrlPreview data={{ link, title, image, description }} />
       </RightContainer>
       {isAuthenticatedUserPost() ? (
