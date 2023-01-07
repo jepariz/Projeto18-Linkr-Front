@@ -69,6 +69,7 @@ const Head = styled.div`
   align-items: center;
   padding: 0px 15px 0px 25px;
   box-sizing: border-box;
+  z-index: 999;
   h1 {
     font-family: "Passion One", cursive;
     color: white;

@@ -19,7 +19,7 @@ export default function CreatePost({ setPosts }) {
     axios
       .post(
         URL,
-        { link, text, hashtags},
+        { link, text, hashtags },
         {
           headers: {
             Authorization: `Bearer ${JSON.parse(localStorage.user).token}`,

@@ -1,20 +1,23 @@
+import LoadingPosts from "../../components/LoadingPosts/LoadingPosts";
+import Post from "../../components/Post/Post";
 import { useEffect, useState } from "react";
 import { getLast20Posts } from "../../api/timeline";
-import Post from "../../components/Post/Post";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 import CreatePost from "./CreatePost";
-import { Container, Loading, PageTitle, PostList } from "./styles";
-
+import { Container, PageTitle, PostList } from "./styles";
 export default function Timeline() {
   const [posts, setPosts] = useState([]);
+  const [timelinePostsStep, setTimelinePostsStep] = useState(0);
 
   function loadPosts() {
+    setTimelinePostsStep(0);
     getLast20Posts()
       .then(({ data }) => {
         setPosts(() => data);
         if (data.length === 0) {
           alert("There are no posts yet");
-        }
+          setTimelinePostsStep(2);
+        } else setTimelinePostsStep(1);
       })
       .catch((error) =>
         alert(
@@ -33,13 +36,15 @@ export default function Timeline() {
         <PageTitle>timeline</PageTitle>
         <CreatePost setPosts={setPosts} />
         <PostList>
-          {posts.length === 0 ? (
-            <Loading src="https://yorkdalelincoln.com/wp-content/themes/lbx-iag/resources/images/spinner.gif" />
-          ) : (
-            posts.map((post) => (
-              <Post key={post.id} data={post} load={loadPosts} />
-            ))
-          )}
+          {
+            [
+              <LoadingPosts />,
+              posts.map((post) => (
+                <Post key={post.id} data={post} reload={loadPosts} />
+              )),
+              "",
+            ][timelinePostsStep]
+          }
         </PostList>
       </Container>
     </MainLayout>

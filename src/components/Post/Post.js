@@ -1,34 +1,51 @@
-import {
-  Container,
-  LeftContainer,
-  Photo,
-  Username,
-  RightContainer,
-  ContainerIcons,
-  Like,
-} from "./styles";
-import UrlPreview from "./UrlPreview/UrlPreview";
-import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
-import { ReactTagify } from "react-tagify";
-import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
-import { useEffect, useState } from "react";
-import Comment from "./Comment/Comment";
 import axios from "axios";
-import ModalDeletePost from "./ModalDeletePost/ModalDeletePost";
+import { useEffect, useState } from "react";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import { deletePostById, updatePostById } from "../../api/post";
+import Comment from "./Comment/Comment";
+import DeleteButton from "./DeleteButton/DeleteButton";
+import EditButton from "./EditButton/EditButton";
+import ModalDelete from "../ModalDelete/ModalDelete";
+import {
+  Photo,
+  PostContainer,
+  Username,
+  ButtonsGroup,
+  Like,
+  PhotoLikeGroup,
+} from "./Post.style";
+import UrlMetadata from "./UrlMetadata/UrlMetadata";
 
-export default function Post({ data, load }) {
+export default function Post({ data, reload }) {
   const { id, photo, username, link, text, title, image, description } = data;
-  const [openModal, setOpenModal] = useState(false);
-  const [editMode, setEditMode] = useState(false);
+  const editMode = useState(false);
+  const deleteMode = useState(false);
 
-  function handleEditMode() {
-    setEditMode(!editMode);
+  function updatePost({ comment }, sucessFn, errorFn) {
+    updatePostById({ id, comment })
+      .then(() => {
+        sucessFn();
+      })
+      .catch((error) => {
+        alert("NÃO FOI POSSIVEL ALTERAR O POST");
+        errorFn();
+      });
   }
 
-  function isAuthenticatedUserPost() {
-    return JSON.parse(localStorage.user).username === username;
+  function deletePost(sucessFn, errorFn) {
+    deletePostById(id)
+      .then(() => {
+        reload();
+        sucessFn();
+      })
+      .catch((error) => {
+        alert("NAO FOI POSSIVEL DELETAR");
+        errorFn();
+      });
   }
-  
+
+  // LIKE
+
   let post_id = id;
 
   const [isLiked, setIsLiked] = useState(false);
@@ -43,7 +60,6 @@ export default function Post({ data, load }) {
       .then((e) => setIsLiked(e.data.liked))
       .catch((e) => console.log(e.response.data.message));
   }, []);
-
 
   function likePost() {
     if (isLiked) {
@@ -79,9 +95,10 @@ export default function Post({ data, load }) {
     }
   }
 
+  // RENDER
   return (
-    <Container>
-      <LeftContainer>
+    <PostContainer>
+      <PhotoLikeGroup>
         <Photo src={photo} />
         <Like onClick={() => likePost()}>
           {isLiked ? (
@@ -90,33 +107,15 @@ export default function Post({ data, load }) {
             <AiOutlineHeart fontSize={22} color={"#fff"} />
           )}
         </Like>
-      </LeftContainer>
-      <RightContainer>
-        <Username>{username}</Username>
-        <Comment editModeState={[editMode, setEditMode]} text={text}  id={id} />
-        <UrlPreview data={{ link, title, image, description }} />
-      </RightContainer>
-      {isAuthenticatedUserPost() ? (
-        <ContainerIcons>
-          <FaPencilAlt
-            fontSize={15}
-            onClick={() => handleEditMode()}
-            color="#fff"
-          />
-          <FaTrashAlt
-            fontSize={15}
-            onClick={() => setOpenModal(true)}
-            color="#fff"
-          />
-        </ContainerIcons>
-      ) : (
-        ""
-      )}
-      {openModal ? (
-        <ModalDeletePost id={id} reload={load} setOpen={setOpenModal} />
-      ) : (
-        ""
-      )}
-    </Container>
+      </PhotoLikeGroup>
+      <Username>{username} </Username>
+      <ButtonsGroup>
+        <EditButton editModeState={editMode} />
+        <DeleteButton deleteModeState={deleteMode} />
+      </ButtonsGroup>
+      <Comment text={text} editModeState={editMode} update={updatePost} />
+      <UrlMetadata data={{ link, title, image, description }} />
+      <ModalDelete deletePost={deletePost} deleteModeState={deleteMode} />
+    </PostContainer>
   );
 }

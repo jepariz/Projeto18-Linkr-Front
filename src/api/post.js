@@ -1,17 +1,14 @@
 import axios from "axios";
+import { headers } from "../utils/token";
 const URL = "http://localhost:4000";
 
 export function updatePostById({ id, comment }) {
   return axios.put(
-    URL + "/post/" + id,
+    `${URL}/post/${id}`,
     {
       comment,
     },
-    {
-      headers: {
-        Authorization: `Bearer ${JSON.parse(localStorage.user).token}`,
-      },
-    }
+    headers
   );
 }
 
