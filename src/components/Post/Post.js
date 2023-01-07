@@ -1,8 +1,8 @@
-import axios from "axios";
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { useEffect, useState } from "react";
-import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import { deletePostById, updatePostById } from "../../api/post";
 import Comment from "./Comment/Comment";
+import axios from "axios";
+import { deletePostById, updatePostById } from "../../api/post";
 import DeleteButton from "./DeleteButton/DeleteButton";
 import EditButton from "./EditButton/EditButton";
 import ModalDelete from "../ModalDelete/ModalDelete";
@@ -20,6 +20,10 @@ export default function Post({ data, reload }) {
   const { id, photo, username, link, text, title, image, description } = data;
   const editMode = useState(false);
   const deleteMode = useState(false);
+
+  function isAuthenticatedUserPost() {
+    return JSON.parse(localStorage.user).username === username;
+  }
 
   function updatePost({ comment }, sucessFn, errorFn) {
     updatePostById({ id, comment })
@@ -109,10 +113,15 @@ export default function Post({ data, reload }) {
         </Like>
       </PhotoLikeGroup>
       <Username>{username} </Username>
-      <ButtonsGroup>
-        <EditButton editModeState={editMode} />
-        <DeleteButton deleteModeState={deleteMode} />
-      </ButtonsGroup>
+      {isAuthenticatedUserPost() ? (
+        <ButtonsGroup>
+          <EditButton editModeState={editMode} />
+          <DeleteButton deleteModeState={deleteMode} />
+        </ButtonsGroup>
+      ) : (
+        ""
+      )}
+
       <Comment text={text} editModeState={editMode} update={updatePost} />
       <UrlMetadata data={{ link, title, image, description }} />
       <ModalDelete deletePost={deletePost} deleteModeState={deleteMode} />

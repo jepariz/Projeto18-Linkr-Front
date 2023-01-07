@@ -58,7 +58,7 @@ export const Link = styled.p`
 
 export const Photo = styled.img`
   object-fit: cover;
-  background-color: #0f0;
+  background-color: #fff;
   width: 115px;
   height: 100%;
   border-radius: 0px 12px 13px 0px;

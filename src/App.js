@@ -4,6 +4,7 @@ import GlobalStyle from "./components/GlobalStyle";
 import Timeline from "./pages/Timeline/Timeline";
 import FrontPage from "./layouts/FrontPage";
 import UserPosts from "./pages/UserPosts/UserPosts";
+import Hashtag from "./pages/Hashtag/Hashtag";
 
 export default function App() {
   return (
@@ -30,6 +31,7 @@ export default function App() {
             </PrivateRoute>
           }
         />
+        <Route path="/hashtag/:hashtag" element={<Hashtag />} />
       </Routes>
     </BrowserRouter>
   );

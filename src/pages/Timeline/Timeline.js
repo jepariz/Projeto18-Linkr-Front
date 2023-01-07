@@ -2,9 +2,19 @@ import LoadingPosts from "../../components/LoadingPosts/LoadingPosts";
 import Post from "../../components/Post/Post";
 import { useEffect, useState } from "react";
 import { getLast20Posts } from "../../api/timeline";
+import { getTrending } from "../../api/trending";
+import getPosts from "../../components/Post/getPosts";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
+import Trending from "../../layouts/Trending";
 import CreatePost from "./CreatePost";
-import { Container, PageTitle, PostList } from "./styles";
+import {
+  Container,
+  LeftContainer,
+  PageTitle,
+  PostList,
+  SubContainer,
+} from "./styles";
+
 export default function Timeline() {
   const [posts, setPosts] = useState([]);
   const [timelinePostsStep, setTimelinePostsStep] = useState(0);
@@ -29,23 +39,33 @@ export default function Timeline() {
   useEffect(() => {
     loadPosts();
   }, []);
+  const [trending, setTrending] = useState([]);
+  useEffect(() => {
+    getPosts(setPosts);
+    getTrending(setTrending);
+  }, []);
 
   return (
     <MainLayout>
       <Container>
-        <PageTitle>timeline</PageTitle>
-        <CreatePost setPosts={setPosts} />
-        <PostList>
-          {
-            [
-              <LoadingPosts />,
-              posts.map((post) => (
-                <Post key={post.id} data={post} reload={loadPosts} />
-              )),
-              "",
-            ][timelinePostsStep]
-          }
-        </PostList>
+        <SubContainer>
+          <LeftContainer>
+            <PageTitle>timeline</PageTitle>
+            <CreatePost setPosts={setPosts} />
+            <PostList>
+              {
+                [
+                  <LoadingPosts />,
+                  posts.map((post) => (
+                    <Post key={post.id} data={post} reload={loadPosts} />
+                  )),
+                  "",
+                ][timelinePostsStep]
+              }
+            </PostList>
+          </LeftContainer>
+          <Trending trending={trending} />
+        </SubContainer>
       </Container>
     </MainLayout>
   );
