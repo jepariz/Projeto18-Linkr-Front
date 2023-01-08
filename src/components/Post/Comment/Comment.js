@@ -7,7 +7,6 @@ import {
   CommentParagraph,
 } from "./Comment.style";
 
-
 export default function Comment({ text, editModeState, update }) {
   const [editMode, setEditMode] = editModeState;
   const [value, setValue] = useState(text);
@@ -19,16 +18,15 @@ export default function Comment({ text, editModeState, update }) {
   const tagStyle = {
     color: "white",
     fontWeight: 700,
-    cursor: 'pointer'
-  }
+    cursor: "pointer",
+  };
 
   const navigate = useNavigate();
 
-  function handleTagClick (tag){
+  function handleTagClick(tag) {
+    const hash = tag.trim().split("#");
 
-    const hash = tag.trim().split('#')
-    
-    if (hash[0] === '') {
+    if (hash[0] === "") {
       hash.shift();
     }
 
@@ -51,23 +49,6 @@ export default function Comment({ text, editModeState, update }) {
       setEditMode(false);
       setValue(newValue);
     }
-
-    if (e.keyCode === 27) setEditMode(false);
-  }
-
-
-  function updateComment({ id, comment }) {
-    setInputDisabled(true);
-    updatePostById({ id, comment })
-      .then(() => {
-        setEditMode(false);
-        setInputDisabled(false);
-        setParagraphText(comment);
-      })
-      .catch((error) => {
-        setInputDisabled(false);
-        alert("Ocorreu um erro");
-      });
   }
 
   return (
@@ -80,7 +61,15 @@ export default function Comment({ text, editModeState, update }) {
           disabled={disabled}
         />
       ) : (
-        <CommentText><ReactTagify tag={hashtags}  tagClicked={(tag) => handleTagClick(tag)} tagStyle={tagStyle}>{paragraphText}</ReactTagify></CommentText>
+        <CommentParagraph>
+          <ReactTagify
+            tag={hashtags}
+            tagClicked={(tag) => handleTagClick(tag)}
+            tagStyle={tagStyle}
+          >
+            {paragraphText}
+          </ReactTagify>
+        </CommentParagraph>
       )}
     </CommentContainer>
   );
