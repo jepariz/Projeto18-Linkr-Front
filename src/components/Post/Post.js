@@ -15,7 +15,6 @@ import {
   PhotoLikeGroup,
 } from "./Post.style";
 import UrlMetadata from "./UrlMetadata/UrlMetadata";
-import { ReactTagify } from "react-tagify";
 
 export default function Post({ data, reload }) {
   const { id, photo, username, link, text, title, image, description } = data;
@@ -64,7 +63,7 @@ export default function Post({ data, reload }) {
       })
       .then((e) => setIsLiked(e.data.liked))
       .catch((e) => console.log(e.response.data.message));
-  }, []);
+  }, [post_id]);
 
   function likePost() {
     if (isLiked) {

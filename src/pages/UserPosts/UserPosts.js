@@ -1,9 +1,7 @@
 import LoadingPosts from "../../components/LoadingPosts/LoadingPosts";
 import Post from "../../components/Post/Post";
 import { useEffect, useState } from "react";
-import { getLast20Posts } from "../../api/timeline";
 import { getTrending } from "../../api/trending";
-import getPosts from "../../components/Post/getPosts";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
 import Trending from "../../layouts/Trending";
 import {
