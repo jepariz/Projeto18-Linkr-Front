@@ -19,7 +19,17 @@ import UserPosts from "../../pages/UserPosts/UserPosts";
 import { useNavigate } from "react-router-dom";
 
 export default function Post({ data, reload }) {
-  const { id, user_id, photo, username, link, text, title, image, description } = data;
+  const {
+    id,
+    user_id,
+    photo,
+    username,
+    link,
+    text,
+    title,
+    image,
+    description,
+  } = data;
   const editMode = useState(false);
   const deleteMode = useState(false);
   const navigate = useNavigate();
@@ -27,7 +37,6 @@ export default function Post({ data, reload }) {
   function isAuthenticatedUserPost() {
     return JSON.parse(localStorage.user).username === username;
   }
-
 
   function updatePost({ comment }, sucessFn, errorFn) {
     updatePostById({ id, comment })
@@ -103,8 +112,6 @@ export default function Post({ data, reload }) {
     }
   }
 
-  function userPosts(id) {}
-
   // RENDER
   return (
     <PostContainer>
@@ -118,7 +125,9 @@ export default function Post({ data, reload }) {
           )}
         </Like>
       </PhotoLikeGroup>
-      <Username onClick={() => navigate(`/user/${user_id}`)}>{username} </Username>
+      <Username onClick={() => navigate(`/user/${user_id}`)}>
+        {username}{" "}
+      </Username>
       {isAuthenticatedUserPost() ? (
         <ButtonsGroup>
           <EditButton editModeState={editMode} />
