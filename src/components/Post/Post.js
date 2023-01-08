@@ -15,15 +15,19 @@ import {
   PhotoLikeGroup,
 } from "./Post.style";
 import UrlMetadata from "./UrlMetadata/UrlMetadata";
+import UserPosts from "../../pages/UserPosts/UserPosts";
+import { useNavigate } from "react-router-dom";
 
 export default function Post({ data, reload }) {
-  const { id, photo, username, link, text, title, image, description } = data;
+  const { id, user_id, photo, username, link, text, title, image, description } = data;
   const editMode = useState(false);
   const deleteMode = useState(false);
+  const navigate = useNavigate();
 
   function isAuthenticatedUserPost() {
     return JSON.parse(localStorage.user).username === username;
   }
+
 
   function updatePost({ comment }, sucessFn, errorFn) {
     updatePostById({ id, comment })
@@ -53,6 +57,12 @@ export default function Post({ data, reload }) {
   let post_id = id;
 
   const [isLiked, setIsLiked] = useState(false);
+
+  useEffect(() => {
+    axios
+        .get("http://localhost:4000/getUserId",
+        {})
+  }, [])
 
   useEffect(() => {
     axios
@@ -91,7 +101,7 @@ export default function Post({ data, reload }) {
     }
   }
 
-  function sucess(event) {
+  function sucess() {
     if (isLiked) {
       setIsLiked(false);
     } else {
@@ -99,11 +109,13 @@ export default function Post({ data, reload }) {
     }
   }
 
+  function userPosts(id) {}
+
   // RENDER
   return (
     <PostContainer>
       <PhotoLikeGroup>
-        <Photo src={photo} />
+        <Photo src={photo} onClick={() => navigate(`/user/${user_id}`)} />
         <Like onClick={() => likePost()}>
           {isLiked ? (
             <AiFillHeart fontSize={22} color={"#AC0000"} />
@@ -112,7 +124,7 @@ export default function Post({ data, reload }) {
           )}
         </Like>
       </PhotoLikeGroup>
-      <Username>{username} </Username>
+      <Username onClick={() => navigate(`/user/${user_id}`)}>{username} </Username>
       {isAuthenticatedUserPost() ? (
         <ButtonsGroup>
           <EditButton editModeState={editMode} />
