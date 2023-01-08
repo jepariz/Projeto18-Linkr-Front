@@ -60,12 +60,6 @@ export default function Post({ data, reload }) {
 
   useEffect(() => {
     axios
-        .get("http://localhost:4000/getUserId",
-        {})
-  }, [])
-
-  useEffect(() => {
-    axios
       .get("http://localhost:4000/isLiked/" + post_id, {
         headers: {
           Authorization: `Bearer ${JSON.parse(localStorage.user).token}`,
