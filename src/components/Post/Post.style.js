@@ -31,6 +31,9 @@ export const Photo = styled.img`
   border-radius: 50%;
   background-color: #cecece;
   object-fit: cover;
+  :hover {
+    cursor: pointer;
+  }
   @media (min-width: 1024px) {
     width: 50px;
     height: 50px;
@@ -55,6 +58,9 @@ export const Username = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  :hover {
+    cursor: pointer;
+  }
 `;
 
 export const ButtonsGroup = styled.div`
