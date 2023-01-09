@@ -37,7 +37,7 @@ export default function Header() {
   return (
     <>
       <Head>
-        <h1>linkr</h1>
+        <Logo onClick={() => navigate("/timeline")}>linkr</Logo>
         <Icons ref={refImage}>
           {showSubMenu ? (
             <AiOutlineUp color="white" fontSize="25px" />
@@ -70,12 +70,6 @@ const Head = styled.div`
   padding: 0px 15px 0px 25px;
   box-sizing: border-box;
   z-index: 999;
-  h1 {
-    font-family: "Passion One", cursive;
-    color: white;
-    font-size: 55px;
-    font-weight: bold;
-  }
 `;
 
 const Icons = styled.div`
@@ -115,4 +109,12 @@ const SubMenu = styled.div`
     font-weight: bold;
     cursor: pointer;
   }
+`;
+
+const Logo = styled.h1 `
+  font-family: "Passion One", cursive;
+  color: white;
+  font-size: 55px;
+  font-weight: bold;
+  cursor: pointer;
 `;
