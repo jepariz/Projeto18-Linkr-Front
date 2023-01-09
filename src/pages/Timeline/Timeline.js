@@ -48,9 +48,9 @@ export default function Timeline() {
   return (
     <MainLayout>
       <Container>
+        <PageTitle>timeline</PageTitle>
         <SubContainer>
           <LeftContainer>
-            <PageTitle>timeline</PageTitle>
             <CreatePost setPosts={setPosts} />
             <PostList>
               {

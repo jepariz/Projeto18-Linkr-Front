@@ -7,13 +7,20 @@ export function updatePostById({ id, comment }) {
     `${URL_back}post/${id}`,
     {
       comment,
-    },
-    headers
+    }, {
+      headers: {
+        Authorization: `Bearer ${JSON.parse(localStorage.user).token}`,
+      },
+    }
   );
 }
 
 export function getUserPosts(id) {
-  return axios.get(`${URL_back}user/${id}`, headers);
+  return axios.get(`${URL_back}user/${id}`, {
+    headers: {
+      Authorization: `Bearer ${JSON.parse(localStorage.user).token}`,
+    },
+  });
 }
 
 export function deletePostById(id) {
