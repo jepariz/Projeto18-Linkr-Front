@@ -31,15 +31,19 @@ export default function UserSearch() {
 
   return (
     <SearchContainer>
-      <UserSearchInput
+      <DebounceInput
           minLength={3}
           debounceTimeout={300}
           onChange={(e) => {
             handleSearch(e.target.value)
           }}
+          value={searchTerm}
+          placeholder='Search for people'
+          element={UserSearchInput}
         />
-      <SearchIcon></SearchIcon>
-      {users.length > 0 ? <Results users={users} term={searchTerm}/> : null}
+        <SearchIcon></SearchIcon>
+      
+      {users.length > 0 ? <Results users={users} term={searchTerm} setUsers={setUsers}/> : null}
     </SearchContainer>
   );
 }
@@ -50,10 +54,7 @@ const SearchContainer = styled.div`
   position: relative;
 `;
 
-const UserSearchInput = styled(DebounceInput).attrs({
-  type: "search",
-  placeholder: "Search for people",
-})`
+const UserSearchInput = styled.input`
   width: 563px;
   height: 45px;
   border-radius: 8px;
