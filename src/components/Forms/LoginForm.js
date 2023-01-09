@@ -1,34 +1,33 @@
 import axios from "axios";
-import { useState} from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { ThreeDots } from "react-loader-spinner";
-import {saveUserInfoInLocalStorage} from "../../utils/userLocalStorage"
+import { saveUserInfoInLocalStorage } from "../../utils/userLocalStorage";
+import FrontPage from "../../layouts/FrontPage";
 
-export default function LoginForm(props) {
+export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [login, setLogin] = useState(false);
 
   const navigate = useNavigate();
- 
-  function handleLogin() {
-    const promise = axios.post(
-      "http://localhost:4000/login",
-      {
-        email: email,
-        password: password,
-      }
-    );
-    promise.then((res) => {
 
+  function handleLogin(e) {
+    e.preventDefault();
+
+    const promise = axios.post("http://localhost:4000/login", {
+      email: email,
+      password: password,
+    });
+    promise.then((res) => {
       const info = {
         token: res.data.jwtToken,
         photoUrl: res.data.payload.photoUrl,
-        username: res.data.payload.username
-      }
+        username: res.data.payload.username,
+      };
 
-      saveUserInfoInLocalStorage(info)
+      saveUserInfoInLocalStorage(info);
       navigate("/timeline");
     });
 
@@ -41,43 +40,47 @@ export default function LoginForm(props) {
   }
 
   return (
-    <RegisterFormContainer>
-      <FormContainer>
-        <input
-          type="email"
-          placeholder="email"
-          disabled={login ? true : false}
-          onChange={(e) => setEmail(e.target.value)}
-          value={email}
-        ></input>
-        <input
-          type="password"
-          placeholder="password"
-          disabled={login ? true : false}
-          onChange={(e) => setPassword(e.target.value)}
-          value={password}
-        ></input>
-         {login ? (
-  <button>
-    <ThreeDots
-      height="70"
-      width="80"
-      radius="9"
-      color="#fff"
-      ariaLabel="three-dots-loading"
-      wrapperStyle={{}}
-      wrapperClassName=""
-      visible={true}
-    />
-  </button>
-) : (
-  <button onClick={() => handleLogin()}>Log In</button>
-)}
-        <Link to="/signup">
-          <p onClick={() => props.setChooseForm('signup')}>First time? Create an account!</p>
-        </Link>
-      </FormContainer>
-    </RegisterFormContainer>
+    <FrontPage>
+      <RegisterFormContainer>
+        <FormContainer onSubmit={e => handleLogin(e)}>
+          <input
+            type="email"
+            placeholder="email"
+            disabled={login ? true : false}
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
+          ></input>
+          <input
+            type="password"
+            placeholder="password"
+            disabled={login ? true : false}
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+          ></input>
+          {login ? (
+            <button disabled>
+              <ThreeDots
+                height="70"
+                width="80"
+                radius="9"
+                color="#fff"
+                ariaLabel="three-dots-loading"
+                wrapperStyle={{}}
+                wrapperClassName=""
+                visible={true}
+              />
+            </button>
+          ) : (
+            <button type="submit" style={{"cursor": "pointer"}}>Log In</button>
+          )}
+          <Link to="/signup">
+            <p onClick={() => navigate("/signup")}>
+              First time? Create an account!
+            </p>
+          </Link>
+        </FormContainer>
+      </RegisterFormContainer>
+    </FrontPage>
   );
 }
 
@@ -88,9 +91,8 @@ const RegisterFormContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-
 `;
-const FormContainer = styled.div`
+const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
   align-content: center;
@@ -145,15 +147,13 @@ const FormContainer = styled.div`
     place-self: center;
   }
 
-  @media(max-width: 375px) {
-
+  @media (max-width: 375px) {
     height: 80%;
-    
-    input, button{
-    width: 330px;
-    height: 55px;
+
+    input,
+    button {
+      width: 330px;
+      height: 55px;
     }
-
-
   }
 `;

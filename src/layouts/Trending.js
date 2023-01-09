@@ -4,7 +4,7 @@ import styled from "styled-components";
 export default function Trending({ trending }) {
   const renderHashtags = [];
   const navigate = useNavigate();
-  console.log("111");
+  // console.log("111");
   if (trending.length === 0) {
     renderHashtags.push(
       <ZeroTrendings key={0}>Ainda não há hashtag a ser mostrada</ZeroTrendings>

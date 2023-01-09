@@ -1,24 +1,15 @@
 import styled from "styled-components";
-import RegisterForm from "../components/Forms/RegisterForm";
-import { useState } from "react";
-import LoginForm from "../components/Forms/LoginForm";
 
-export default function FrontPage() {
-
-  const [chooseForm, setChooseForm] = useState('login')
-
+export default function FrontPage({children}) {
   return (
-    <>
     <RegisterContainer>
         <Message>
             <h1>linkr</h1>
             <p>save, share and discover <br></br>
             the best links on the web</p>
         </Message>
-        {chooseForm === 'login' ? <LoginForm setChooseForm={setChooseForm}/> : <RegisterForm setChooseForm={setChooseForm}/>}
+        {children}
     </RegisterContainer>
-    
-    </>
   )
 }
 
