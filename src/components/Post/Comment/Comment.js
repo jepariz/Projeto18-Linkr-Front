@@ -6,6 +6,7 @@ import {
   CommentInput,
   CommentParagraph,
 } from "./Comment.style";
+import { updatePostById } from "../../../api/post";
 
 export default function Comment({ text, editModeState, update }) {
   const [editMode, setEditMode] = editModeState;
@@ -61,15 +62,7 @@ export default function Comment({ text, editModeState, update }) {
           disabled={disabled}
         />
       ) : (
-        <CommentParagraph>
-          <ReactTagify
-            tag={hashtags}
-            tagClicked={(tag) => handleTagClick(tag)}
-            tagStyle={tagStyle}
-          >
-            {paragraphText}
-          </ReactTagify>
-        </CommentParagraph>
+        <CommentParagraph><ReactTagify tag={hashtags}  tagClicked={(tag) => handleTagClick(tag)} tagStyle={tagStyle}>{paragraphText}</ReactTagify></CommentParagraph>
       )}
     </CommentContainer>
   );
