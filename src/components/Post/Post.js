@@ -15,12 +15,24 @@ import {
   PhotoLikeGroup,
 } from "./Post.style";
 import UrlMetadata from "./UrlMetadata/UrlMetadata";
-import { ReactTagify } from "react-tagify";
+import UserPosts from "../../pages/UserPosts/UserPosts";
+import { useNavigate } from "react-router-dom";
 
 export default function Post({ data, reload }) {
-  const { id, photo, username, link, text, title, image, description } = data;
+  const {
+    id,
+    user_id,
+    photo,
+    username,
+    link,
+    text,
+    title,
+    image,
+    description,
+  } = data;
   const editMode = useState(false);
   const deleteMode = useState(false);
+  const navigate = useNavigate();
 
   function isAuthenticatedUserPost() {
     return JSON.parse(localStorage.user).username === username;
@@ -64,7 +76,7 @@ export default function Post({ data, reload }) {
       })
       .then((e) => setIsLiked(e.data.liked))
       .catch((e) => console.log(e.response.data.message));
-  }, []);
+  }, [post_id]);
 
   function likePost() {
     if (isLiked) {
@@ -92,7 +104,7 @@ export default function Post({ data, reload }) {
     }
   }
 
-  function sucess(event) {
+  function sucess() {
     if (isLiked) {
       setIsLiked(false);
     } else {
@@ -104,7 +116,7 @@ export default function Post({ data, reload }) {
   return (
     <PostContainer>
       <PhotoLikeGroup>
-        <Photo src={photo} />
+        <Photo src={photo} onClick={() => navigate(`/user/${user_id}`)} />
         <Like onClick={() => likePost()}>
           {isLiked ? (
             <AiFillHeart fontSize={22} color={"#AC0000"} />
@@ -113,7 +125,9 @@ export default function Post({ data, reload }) {
           )}
         </Like>
       </PhotoLikeGroup>
-      <Username>{username} </Username>
+      <Username onClick={() => navigate(`/user/${user_id}`)}>
+        {username}{" "}
+      </Username>
       {isAuthenticatedUserPost() ? (
         <ButtonsGroup>
           <EditButton editModeState={editMode} />
