@@ -30,6 +30,9 @@ export default function Trending({ trending }) {
 const Container = styled.div`
   width: 300px;
   margin-top: 40px;
+  @media (max-width: 1024px) {
+    display: none;
+  }
 `;
 
 const TopDiv = styled.div`

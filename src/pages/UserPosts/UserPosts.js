@@ -49,9 +49,9 @@ export default function UserPosts() {
   return (
     <MainLayout>
       <Container>
+        <PageTitle>timeline</PageTitle>
         <SubContainer>
           <LeftContainer>
-            <PageTitle>timeline</PageTitle>
             <PostList>
               {
                 [
