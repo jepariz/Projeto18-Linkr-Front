@@ -17,6 +17,7 @@ import {
 import UrlMetadata from "./UrlMetadata/UrlMetadata";
 import UserPosts from "../../pages/UserPosts/UserPosts";
 import { useNavigate } from "react-router-dom";
+import { Tooltip } from "react-tooltip";
 
 export default function Post({ data, reload }) {
   const {
@@ -33,6 +34,10 @@ export default function Post({ data, reload }) {
   const editMode = useState(false);
   const deleteMode = useState(false);
   const navigate = useNavigate();
+  let [auxArray, setAuxArray] = useState([]);
+  let [listOfPeopleHowLiked, setListOfPeopleHowLiked] = useState([]);
+  let [likes, setLikes] = useState(0);
+  let [isLikedByUser, setIsLikedByUser] = useState();
 
   function isAuthenticatedUserPost() {
     return JSON.parse(localStorage.user).username === username;
@@ -61,9 +66,51 @@ export default function Post({ data, reload }) {
       });
   }
 
-  // LIKE
-
   let post_id = id;
+
+  useEffect(() => {
+    getLikes(id, username);
+  }, []);
+
+  function getLikes(id, username) {
+    let postId = id;
+    axios
+      .get(
+        `http://localhost:4000/likeList/${postId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${JSON.parse(localStorage.user).token}`,
+          },
+        },
+        { postId }
+      )
+      .then((likesAndNames) => getLikesFromServer(likesAndNames))
+      .catch((err) => console.log(err));
+  }
+
+  function getLikesFromServer(likesAndNames) {
+    let newLst = [];
+    if (!likesAndNames.data.users || typeof newLst === "string") {
+    }
+    likesAndNames.data.users?.map((u) => newLst.push(u.username));
+    console.log(newLst)
+    console.log(typeof newLst === "string")
+    if (!newLst) {
+      console.log('AQUI CARAI')
+      setAuxArray([""]);
+    } else if (typeof newLst === "string") {
+      console.log("entrei no segundo if");
+      return setAuxArray([newLst + "curtiu isso"]);
+    } else if (newLst?.find(username) && likesAndNames.likes === 1) {
+      console.log("cai na segunda condição");
+      setAuxArray(["Você curtiu isso"]);
+    } else if (newLst?.find(username) && likesAndNames.likes === 2) {
+      console.log("caiu na terceira");
+      setAuxArray(["Você, e", newLst[0], "curtiram este post"]);
+    }
+  }
+
+  // LIKE
 
   const [isLiked, setIsLiked] = useState(false);
 
@@ -103,6 +150,8 @@ export default function Post({ data, reload }) {
         .catch((e) => console.log(e.response.data.message));
     }
   }
+
+  console.log(listOfPeopleHowLiked);
 
   function sucess() {
     if (isLiked) {
