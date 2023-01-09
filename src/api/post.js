@@ -1,5 +1,4 @@
 import axios from "axios";
-import { headers } from "../utils/token";
 import URL_back from "../utils/URL_back";
 
 export function updatePostById({ id, comment }) {
