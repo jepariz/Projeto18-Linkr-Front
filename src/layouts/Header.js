@@ -1,7 +1,11 @@
 import styled from "styled-components";
-import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
+import { AiOutlineDown, AiOutlineUp} from "react-icons/ai";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import UserSearch from "../components/Search/UserSearch";
+
+
+
 
 export default function Header() {
   const [showSubMenu, setShowSubMenu] = useState(null);
@@ -38,6 +42,8 @@ export default function Header() {
     <>
       <Head>
         <h1>linkr</h1>
+        <UserSearch/>
+        
         <Icons ref={refImage}>
           {showSubMenu ? (
             <AiOutlineUp color="white" fontSize="25px" />
@@ -116,3 +122,5 @@ const SubMenu = styled.div`
     cursor: pointer;
   }
 `;
+
+

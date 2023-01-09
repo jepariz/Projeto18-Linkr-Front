@@ -6,6 +6,7 @@ import {
   CommentInput,
   CommentParagraph,
 } from "./Comment.style";
+import { updatePostById } from "../../../api/post";
 
 
 export default function Comment({ text, editModeState, update }) {
@@ -52,23 +53,23 @@ export default function Comment({ text, editModeState, update }) {
       setValue(newValue);
     }
 
-    if (e.keyCode === 27) setEditMode(false);
+    // if (e.keyCode === 27) setEditMode(false);
   }
 
 
-  function updateComment({ id, comment }) {
-    setInputDisabled(true);
-    updatePostById({ id, comment })
-      .then(() => {
-        setEditMode(false);
-        setInputDisabled(false);
-        setParagraphText(comment);
-      })
-      .catch((error) => {
-        setInputDisabled(false);
-        alert("Ocorreu um erro");
-      });
-  }
+  // function updateComment({ id, comment }) {
+  //   setInputDisabled(true);
+  //   updatePostById({ id, comment })
+  //     .then(() => {
+  //       setEditMode(false);
+  //       setInputDisabled(false);
+  //       setParagraphText(comment);
+  //     })
+  //     .catch((error) => {
+  //       setInputDisabled(false);
+  //       alert("Ocorreu um erro");
+  //     });
+  // }
 
   return (
     <CommentContainer>
@@ -80,7 +81,7 @@ export default function Comment({ text, editModeState, update }) {
           disabled={disabled}
         />
       ) : (
-        <CommentText><ReactTagify tag={hashtags}  tagClicked={(tag) => handleTagClick(tag)} tagStyle={tagStyle}>{paragraphText}</ReactTagify></CommentText>
+        <CommentParagraph><ReactTagify tag={hashtags}  tagClicked={(tag) => handleTagClick(tag)} tagStyle={tagStyle}>{paragraphText}</ReactTagify></CommentParagraph>
       )}
     </CommentContainer>
   );
