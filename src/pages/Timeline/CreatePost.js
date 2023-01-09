@@ -3,6 +3,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import { getTrending } from "../../api/trending";
 import getPosts from "../../components/Post/getPosts";
+import URL_back from "../../utils/URL_back";
 
 export default function CreatePost({ setPosts, setTrending }) {
   const [link, setLink] = useState("");
@@ -13,7 +14,7 @@ export default function CreatePost({ setPosts, setTrending }) {
     e.preventDefault();
     setIsProcessing(true);
 
-    const URL = "http://localhost:4000/post";
+    const URL = URL_back + "post";
     axios
       .post(
         URL,

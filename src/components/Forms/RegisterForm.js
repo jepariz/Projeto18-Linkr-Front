@@ -3,6 +3,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { ThreeDots } from "react-loader-spinner";
+import URL_back from "../../utils/URL_back";
 
 export default function RegisterForm(props) {
   const [email, setEmail] = useState("");
@@ -16,7 +17,7 @@ export default function RegisterForm(props) {
   function handleRegister() {
 
     const promise = axios.post(
-      "http://localhost:4000/signup",
+      URL_back + "signup",
       {
         email: email,
         username: username,

@@ -4,6 +4,7 @@ import DebounceInput from "react-debounce-input";
 import { useState } from "react";
 import axios from "axios";
 import Results from "./Results";
+import URL_back from "../../utils/URL_back";
 
 export default function UserSearch() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -13,7 +14,7 @@ export default function UserSearch() {
 
     setSearchTerm(term)
    
-   const promise = axios.get(`http://localhost:4000/search?q=${term}`, 
+   const promise = axios.get(`${URL_back}search?q=${term}`, 
         {
           headers: {
             Authorization: `Bearer ${JSON.parse(localStorage.user).token}`,
