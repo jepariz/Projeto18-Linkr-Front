@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { ThreeDots } from "react-loader-spinner";
 import FrontPage from "../../layouts/FrontPage";
+import URL_back from "../../utils/URL_back";
 
 export default function RegisterForm() {
   const [email, setEmail] = useState("");
@@ -17,12 +18,15 @@ export default function RegisterForm() {
   function handleRegister(e) {
     e.preventDefault();
 
-    const promise = axios.post("http://localhost:4000/signup", {
-      email: email,
-      username: username,
-      photo: photo,
-      password: password,
-    });
+    const promise = axios.post(
+      URL_back + "signup",
+      {
+        email: email,
+        username: username,
+        photo: photo,
+        password: password,
+      }
+    );
     promise.then((res) => {
       setRegisterOk(true);
       alert("Cadastro concluído com sucesso!");

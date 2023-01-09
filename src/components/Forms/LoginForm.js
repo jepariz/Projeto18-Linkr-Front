@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { ThreeDots } from "react-loader-spinner";
 import { saveUserInfoInLocalStorage } from "../../utils/userLocalStorage";
 import FrontPage from "../../layouts/FrontPage";
+import URL_back from "../../utils/URL_back";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -16,7 +17,7 @@ export default function LoginForm() {
   function handleLogin(e) {
     e.preventDefault();
 
-    const promise = axios.post("http://localhost:4000/login", {
+    const promise = axios.post(URL_back + "login", {
       email: email,
       password: password,
     });
