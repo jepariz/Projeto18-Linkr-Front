@@ -13,6 +13,7 @@ import {
   ButtonsGroup,
   Like,
   PhotoLikeGroup,
+  InfoLike,
 } from "./Post.style";
 import UrlMetadata from "./UrlMetadata/UrlMetadata";
 import UserPosts from "../../pages/UserPosts/UserPosts";
@@ -35,10 +36,9 @@ export default function Post({ data, reload }) {
   const editMode = useState(false);
   const deleteMode = useState(false);
   const navigate = useNavigate();
-  let [auxArray, setAuxArray] = useState([]);
-  let [listOfPeopleHowLiked, setListOfPeopleHowLiked] = useState([]);
-  let [likes, setLikes] = useState(0);
-  let [isLikedByUser, setIsLikedByUser] = useState();
+  const [auxArray, setAuxArray] = useState([]);
+  const [tooltip, showTooltip] = useState(true);
+  const [isLiked, setIsLiked] = useState(false);
 
   function isAuthenticatedUserPost() {
     return JSON.parse(localStorage.user).username === username;
@@ -67,11 +67,9 @@ export default function Post({ data, reload }) {
       });
   }
 
-  let post_id = id;
-
   useEffect(() => {
     getLikes(id, username);
-  }, []);
+  }, [isLiked]);
 
   function getLikes(id, username) {
     let postId = id;
@@ -90,30 +88,42 @@ export default function Post({ data, reload }) {
   }
 
   function getLikesFromServer(likesAndNames) {
+    let usernameLocal = JSON.parse(localStorage.user).username;
     let newLst = [];
-    if (!likesAndNames.data.users || typeof newLst === "string") {
-    }
     likesAndNames.data.users?.map((u) => newLst.push(u.username));
-    console.log(newLst)
-    console.log(typeof newLst === "string")
     if (!newLst) {
-      console.log('AQUI CARAI')
       setAuxArray([""]);
-    } else if (typeof newLst === "string") {
-      console.log("entrei no segundo if");
-      return setAuxArray([newLst + "curtiu isso"]);
-    } else if (newLst?.find(username) && likesAndNames.likes === 1) {
-      console.log("cai na segunda condição");
+    } else if (newLst.length === 1 && newLst.find((e) => e !== usernameLocal)) {
+      return setAuxArray([newLst[0], "curtiu isso"]);
+    } else if (newLst.find((e) => e === usernameLocal) && newLst.length === 1) {
       setAuxArray(["Você curtiu isso"]);
-    } else if (newLst?.find(username) && likesAndNames.likes === 2) {
-      console.log("caiu na terceira");
-      setAuxArray(["Você, e", newLst[0], "curtiram este post"]);
+    } else if (newLst.find((e) => e === usernameLocal) && newLst.length === 2) {
+      setAuxArray([`Você e ${newLst[0]} curtiram este post`]);
+    } else if (newLst.find((e) => e === usernameLocal) && newLst.length > 2) {
+      setAuxArray([
+        `
+        Você,
+        ${newLst[0]}
+         e mais
+        ${[newLst.length - 2]}
+        curtiram este post`,
+      ]);
+    } else if (newLst.find((e) => e !== usernameLocal) && newLst.length === 2) {
+      setAuxArray([`${newLst[0]}, ${newLst[1]} curtiram este post`]);
+    } else if (newLst.find((e) => e !== usernameLocal) && newLst.length > 2) {
+      setAuxArray([
+        `${newLst[0]}, ${newLst[1]} e mais ${
+          newLst.length - 2
+        } curtiram este post`,
+      ]);
+    } else if (newLst.find((e) => e !== usernameLocal) && newLst.length === 1) {
+      setAuxArray([`${newLst[0]} curtiu este post.`]);
     }
   }
 
   // LIKE
 
-  const [isLiked, setIsLiked] = useState(false);
+  let post_id = id;
 
   useEffect(() => {
     axios
@@ -124,7 +134,7 @@ export default function Post({ data, reload }) {
       })
       .then((e) => setIsLiked(e.data.liked))
       .catch((e) => console.log(e.response.data.message));
-  }, [post_id]);
+  }, []);
 
   function likePost() {
     if (isLiked) {
@@ -152,8 +162,6 @@ export default function Post({ data, reload }) {
     }
   }
 
-  console.log(listOfPeopleHowLiked);
-
   function sucess() {
     if (isLiked) {
       setIsLiked(false);
@@ -167,13 +175,25 @@ export default function Post({ data, reload }) {
     <PostContainer>
       <PhotoLikeGroup>
         <Photo src={photo} onClick={() => navigate(`/user/${user_id}`)} />
-        <Like onClick={() => likePost()}>
-          {isLiked ? (
-            <AiFillHeart fontSize={22} color={"#AC0000"} />
-          ) : (
-            <AiOutlineHeart fontSize={22} color={"#fff"} />
-          )}
-        </Like>
+
+        {tooltip ? <Tooltip type="info" place="bottom" effect="solid" /> : null}
+        <InfoLike data-tip={auxArray}>
+          <Like
+            onClick={() => likePost()}
+            onMouseOver={() => {
+              showTooltip(true);
+            }}
+            onMouseLeave={() => {
+              showTooltip(false);
+            }}
+          >
+            {isLiked ? (
+              <AiFillHeart fontSize={22} color={"#AC0000"} />
+            ) : (
+              <AiOutlineHeart fontSize={22} color={"#fff"} />
+            )}
+          </Like>
+        </InfoLike>
       </PhotoLikeGroup>
       <Username onClick={() => navigate(`/user/${user_id}`)}>
         {username}{" "}
