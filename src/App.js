@@ -2,17 +2,33 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import GlobalStyle from "./components/GlobalStyle";
 import Timeline from "./pages/Timeline/Timeline";
-import FrontPage from "./layouts/FrontPage";
 import UserPosts from "./pages/UserPosts/UserPosts";
 import Hashtag from "./pages/Hashtag/Hashtag";
+import LoginForm from "./components/Forms/LoginForm";
+import RegisterForm from "./components/Forms/RegisterForm";
+import PublicRoute from "./components/Forms/PublicRoute";
 
 export default function App() {
   return (
     <BrowserRouter>
       <GlobalStyle />
       <Routes>
-        <Route path="/" element={<FrontPage />} />
-        <Route path="/signup" element={<FrontPage />} />
+        <Route
+          path="/"
+          element={
+            <PublicRoute>
+              <LoginForm />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+            <PublicRoute>
+              <RegisterForm />
+            </PublicRoute>
+          }
+        />
         <Route
           path="/timeline"
           exact
@@ -31,7 +47,14 @@ export default function App() {
             </PrivateRoute>
           }
         />
-        <Route path="/hashtag/:hashtag" element={<Hashtag />} />
+        <Route
+          path="/hashtag/:hashtag"
+          element={
+            <PrivateRoute>
+              <Hashtag />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

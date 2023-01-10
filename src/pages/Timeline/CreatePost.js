@@ -3,6 +3,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import { getTrending } from "../../api/trending";
 import getPosts from "../../components/Post/getPosts";
+import URL_back from "../../utils/URL_back";
 
 export default function CreatePost({ setPosts, setTrending }) {
   const [link, setLink] = useState("");
@@ -13,7 +14,7 @@ export default function CreatePost({ setPosts, setTrending }) {
     e.preventDefault();
     setIsProcessing(true);
 
-    const URL = "http://localhost:4000/post";
+    const URL = URL_back + "post";
     axios
       .post(
         URL,
@@ -91,14 +92,14 @@ export default function CreatePost({ setPosts, setTrending }) {
 
 const Container = styled.div`
   width: 100%;
-  max-width: 611px;
   padding: 20px;
   background-color: white;
   display: flex;
   margin-top: 40px;
   gap: 20px;
-  @media (min-width: 1024px) {
-    border-radius: 15px;
+  @media (min-width: 700px) {
+    max-width: 611px;
+    border-radius: 16px;
   }
 `;
 

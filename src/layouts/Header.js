@@ -1,7 +1,11 @@
 import styled from "styled-components";
-import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
+import { AiOutlineDown, AiOutlineUp} from "react-icons/ai";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import UserSearch from "../components/Search/UserSearch";
+
+
+
 
 export default function Header() {
   const [showSubMenu, setShowSubMenu] = useState(null);
@@ -37,7 +41,8 @@ export default function Header() {
   return (
     <>
       <Head>
-        <h1>linkr</h1>
+        <Logo onClick={() => navigate("/timeline")}>linkr</Logo>
+        <UserSearch/>
         <Icons ref={refImage}>
           {showSubMenu ? (
             <AiOutlineUp color="white" fontSize="25px" />
@@ -70,12 +75,6 @@ const Head = styled.div`
   padding: 0px 15px 0px 25px;
   box-sizing: border-box;
   z-index: 999;
-  h1 {
-    font-family: "Passion One", cursive;
-    color: white;
-    font-size: 55px;
-    font-weight: bold;
-  }
 `;
 
 const Icons = styled.div`
@@ -115,4 +114,12 @@ const SubMenu = styled.div`
     font-weight: bold;
     cursor: pointer;
   }
+`;
+
+const Logo = styled.h1 `
+  font-family: "Passion One", cursive;
+  color: white;
+  font-size: 55px;
+  font-weight: bold;
+  cursor: pointer;
 `;

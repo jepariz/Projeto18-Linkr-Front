@@ -17,6 +17,7 @@ import {
 import UrlMetadata from "./UrlMetadata/UrlMetadata";
 import UserPosts from "../../pages/UserPosts/UserPosts";
 import { useNavigate } from "react-router-dom";
+import URL_back from "../../utils/URL_back";
 import { Tooltip } from "react-tooltip";
 
 export default function Post({ data, reload }) {
@@ -116,7 +117,7 @@ export default function Post({ data, reload }) {
 
   useEffect(() => {
     axios
-      .get("http://localhost:4000/isLiked/" + post_id, {
+      .get(URL_back + "isLiked/" + post_id, {
         headers: {
           Authorization: `Bearer ${JSON.parse(localStorage.user).token}`,
         },
@@ -128,7 +129,7 @@ export default function Post({ data, reload }) {
   function likePost() {
     if (isLiked) {
       axios
-        .delete("http://localhost:4000/unlike/" + post_id, {
+        .delete(URL_back + "unlike/" + post_id, {
           headers: {
             Authorization: `Bearer ${JSON.parse(localStorage.user).token}`,
           },
@@ -138,7 +139,7 @@ export default function Post({ data, reload }) {
     } else {
       axios
         .post(
-          "http://localhost:4000/like",
+          URL_back + "like",
           { post_id },
           {
             headers: {

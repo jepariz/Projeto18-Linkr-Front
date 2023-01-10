@@ -12,13 +12,14 @@ export const PostList = styled.div`
 
 export const Container = styled.div`
   display: flex;
-  max-width: 937px;
+  max-width: 611px;
   margin: 0 auto;
   flex-direction: column;
   padding: 20px 0;
 
   @media (min-width: 1024px) {
     padding: 70px 0;
+    max-width: 937px;
   }
 `;
 
@@ -59,4 +60,21 @@ export const ZeroPost = styled.div`
   font-weight: 700;
   font-size: 27px;
   color: #ffffff;
+`;
+
+export const TopContainer = styled.div`
+  display: flex;
+`;
+
+export const UserPhoto = styled.img`
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #cecece;
+  margin: 0px 20px;
+  object-fit: cover;
+  @media (min-width: 1024px) {
+    width: 50px;
+    height: 50px;
+  }
 `;

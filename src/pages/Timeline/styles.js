@@ -12,13 +12,14 @@ export const PostList = styled.div`
 
 export const Container = styled.div`
   display: flex;
-  max-width: 937px;
+  max-width: 611px;
   margin: 0 auto;
   flex-direction: column;
   padding: 20px 0;
 
   @media (min-width: 1024px) {
     padding: 70px 0;
+    max-width: 937px;
   }
 `;
 
