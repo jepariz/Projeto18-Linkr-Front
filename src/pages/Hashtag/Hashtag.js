@@ -28,11 +28,11 @@ export default function Hashtag() {
   const renderPosts = [];
   if (loading) {
     renderPosts.push(
-      <LoadingPosts />
+      <LoadingPosts key="1"/>
     );
   } else {
     if (posts.length === 0) {
-      renderPosts.push(<ZeroPost>Não há post a ser mostrado!</ZeroPost>);
+      renderPosts.push(<ZeroPost key="0">Não há post a ser mostrado!</ZeroPost>);
     } else {
       posts.map((post) => renderPosts.push(<Post key={post.id} data={post} />));
     }
