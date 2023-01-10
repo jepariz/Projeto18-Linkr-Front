@@ -19,7 +19,7 @@ import UrlMetadata from "./UrlMetadata/UrlMetadata";
 import UserPosts from "../../pages/UserPosts/UserPosts";
 import { useNavigate } from "react-router-dom";
 import URL_back from "../../utils/URL_back";
-import { Tooltip } from "react-tooltip";
+import  Tooltip  from "react-tooltip";
 
 export default function Post({ data, reload }) {
   const {
