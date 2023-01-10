@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getTrending } from "../../api/trending";
+import LoadingPosts from "../../components/LoadingPosts/LoadingPosts";
 import getPosts from "../../components/Post/getPosts";
 import Post from "../../components/Post/Post";
 import MainLayout from "../../layouts/MainLayout/MainLayout";
@@ -8,7 +9,6 @@ import Trending from "../../layouts/Trending";
 import {
   Container,
   LeftContainer,
-  Loading,
   PageTitle,
   PostList,
   SubContainer,
@@ -28,7 +28,7 @@ export default function Hashtag() {
   const renderPosts = [];
   if (loading) {
     renderPosts.push(
-      <Loading src="https://yorkdalelincoln.com/wp-content/themes/lbx-iag/resources/images/spinner.gif" />
+      <LoadingPosts />
     );
   } else {
     if (posts.length === 0) {
