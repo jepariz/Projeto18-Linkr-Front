@@ -6,64 +6,66 @@ import axios from "axios";
 import Results from "./Results";
 import URL_back from "../../utils/URL_back";
 
-export default function UserSearch() {
+export default function UserSearchMobile() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [users, setUsers] = useState([])
+  const [users, setUsers] = useState([]);
 
   const handleSearch = (term) => {
+    setSearchTerm(term);
 
-    setSearchTerm(term)
-   
-   const promise = axios.get(`${URL_back}search?q=${term}`, 
-        {
-          headers: {
-            Authorization: `Bearer ${JSON.parse(localStorage.user).token}`,
-          },
-        })
-      
-        promise.then((res) => {
-          setUsers(res.data)})
+    const promise = axios.get(`${URL_back}search?q=${term}`, {
+      headers: {
+        Authorization: `Bearer ${JSON.parse(localStorage.user).token}`,
+      },
+    });
 
-        promise.catch((err) => {
-          alert(err.response.data);
-        }); 
+    promise.then((res) => {
+      setUsers(res.data);
+    });
 
+    promise.catch((err) => {
+      alert(err.response.data);
+    });
   };
 
   return (
     <SearchContainer>
       <DebounceInput
-          minLength={3}
-          debounceTimeout={300}
-          onChange={(e) => {
-            handleSearch(e.target.value)
-          }}
-          value={searchTerm}
-          placeholder='Search for people'
-          element={UserSearchInput}
-        />
-        <SearchIcon></SearchIcon>
-      
-      {users.length > 0 ? <Results users={users} term={searchTerm} setUsers={setUsers}/> : null}
+        minLength={3}
+        debounceTimeout={300}
+        onChange={(e) => {
+          handleSearch(e.target.value);
+        }}
+        value={searchTerm}
+        placeholder="Search for people"
+        element={UserSearchInput}
+      />
+      <SearchIcon></SearchIcon>
+
+      {users.length > 0 ? (
+        <Results users={users} term={searchTerm} setUsers={setUsers} />
+      ) : null}
     </SearchContainer>
   );
 }
 
 const SearchContainer = styled.div`
-  width: 563px;
-  height: 45px;
+  margin-top: 90px;
+  width: 100%;
   position: relative;
+  background-color: #333333;
+  display: flex;
+  justify-content: center;
 
-  @media(max-width: 375px) {
+  @media(min-width: 376px) {
     
     display: none;
    
   }
 `;
 
-
 const UserSearchInput = styled.input`
-  width: 563px;
+  width: 350px;
   height: 45px;
   border-radius: 8px;
   background-color: #fff;
@@ -73,6 +75,7 @@ const UserSearchInput = styled.input`
   border: none;
   padding: 8px;
   box-sizing: border-box;
+  place-self: center;
 
   &::placeholder {
     font-size: 19px;
@@ -87,9 +90,8 @@ const UserSearchInput = styled.input`
 
 const SearchIcon = styled(AiOutlineSearch)`
   position: absolute;
-  right: 10px;
+  right: 20px;
   top: 23%;
   color: #c6c6c6;
   font-size: 25px;
 `;
-
