@@ -26,6 +26,7 @@ export default function LoginForm() {
         token: res.data.jwtToken,
         photoUrl: res.data.payload.photoUrl,
         username: res.data.payload.username,
+        id: res.data.payload.id
       };
 
       saveUserInfoInLocalStorage(info);
