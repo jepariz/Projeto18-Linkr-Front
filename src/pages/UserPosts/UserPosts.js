@@ -14,6 +14,7 @@ import {
   TitleContainer,
   TopContainer,
   UserPhoto,
+  ZeroPost,
 } from "./styles";
 import { getUserPosts } from "../../api/post";
 import { useParams } from "react-router-dom";
@@ -41,7 +42,6 @@ export default function UserPosts() {
         }
         setPosts(() => data.posts);
         if (data.posts.length === 0) {
-          alert("There are no posts yet");
           setTimelinePostsStep(2);
         } else setTimelinePostsStep(1);
       })
@@ -80,7 +80,7 @@ export default function UserPosts() {
         setFollow(data);
         setLoadingFollow(false)})
       .catch((error) => {
-        alert("An error occured while trying to render the follow/unfollow button. Please refresh the page.")
+        alert("An error occured while trying to execute this action. Please try again or refresh the page.")
         setLoadingFollow(false)});
     }
 
@@ -112,7 +112,7 @@ export default function UserPosts() {
                   posts.map((post) => (
                     <Post key={post.id} data={post} reload={loadPosts} />
                   )),
-                  "",
+                  <ZeroPost>There aren't posts to show!</ZeroPost>,
                 ][timelinePostsStep]
               }
             </PostList>
