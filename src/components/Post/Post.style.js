@@ -5,6 +5,7 @@ export const PostContainer = styled.div`
   padding: 15px;
   background-color: #171717;
   display: grid;
+  
 
   grid-template-columns: auto minmax(0, 1fr) auto;
   grid-template-rows: auto auto auto;
@@ -45,6 +46,19 @@ export const Like = styled.div`
   height: 40px;
   margin: auto;
   margin-top: 19px;
+  
+  
+`;
+
+export const InfoLike = styled.span`
+  height: 13px;
+  width: 50px;
+  color: #ffffff;
+  font-family: Lato;
+  font-size: 11px;
+  line-height: 13px;
+  text-align: center;
+  
 `;
 
 export const Username = styled.div`
