@@ -96,3 +96,16 @@ export const Follow = styled.button`
     margin-right: 20px;
   }
 `;
+
+export const UserPhoto = styled.img`
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #cecece;
+  margin: 0px 20px;
+  object-fit: cover;
+  @media (min-width: 1024px) {
+    width: 50px;
+    height: 50px;
+  }
+`;
