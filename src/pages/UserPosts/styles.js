@@ -109,3 +109,7 @@ export const UserPhoto = styled.img`
     height: 50px;
   }
 `;
+
+export const TitleContainer = styled.div`
+  display: flex;
+`
