@@ -3,8 +3,10 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { ThreeDots } from "react-loader-spinner";
+import FrontPage from "../../layouts/FrontPage";
+import URL_back from "../../utils/URL_back";
 
-export default function RegisterForm(props) {
+export default function RegisterForm() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [photo, setPhoto] = useState("");
@@ -13,10 +15,11 @@ export default function RegisterForm(props) {
   const [register, setRegister] = useState(false);
   const navigate = useNavigate();
 
-  function handleRegister() {
+  function handleRegister(e) {
+    e.preventDefault();
 
     const promise = axios.post(
-      "http://localhost:4000/signup",
+      URL_back + "signup",
       {
         email: email,
         username: username,
@@ -26,6 +29,7 @@ export default function RegisterForm(props) {
     );
     promise.then((res) => {
       setRegisterOk(true);
+      alert("Cadastro concluído com sucesso!");
       navigate("/");
     });
 
@@ -38,61 +42,63 @@ export default function RegisterForm(props) {
   }
 
   return (
-    <RegisterFormContainer>
-      <FormContainer>
-        <input
-          type="email"
-          placeholder="email"
-          disabled={register && !registerOk ? true : false}
-          onChange={(e) => setEmail(e.target.value)}
-          value={email}
-        ></input>
-        <input
-          type="password"
-          placeholder="password"
-          disabled={register && !registerOk ? true : false}
-          onChange={(e) => setPassword(e.target.value)}
-          value={password}
-        ></input>
-        <input
-          type="text"
-          placeholder="username"
-          disabled={register && !registerOk ? true : false}
-          onChange={(e) => setUsername(e.target.value)}
-          value={username}
-        ></input>
-        <input
-          type="url"
-          placeholder="picture url"
-          disabled={register && !registerOk ? true : false}
-          onChange={(e) => setPhoto(e.target.value)}
-          value={photo}
-        ></input>
-         {register && !registerOk ? (
-  <button>
-    <ThreeDots
-      height="70"
-      width="80"
-      radius="9"
-      color="#fff"
-      ariaLabel="three-dots-loading"
-      wrapperStyle={{}}
-      wrapperClassName=""
-      visible={true}
-    />
-  </button>
-) : (
-  <button onClick={() => handleRegister()}>Sign Up</button>
-)}
-        <Link to="/">
-          <p onClick={() => props.setChooseForm('login')}>Switch back to log in</p>
-        </Link>
-      </FormContainer>
-    </RegisterFormContainer>
+    <FrontPage>
+      <RegisterFormContainer>
+        <FormContainer onSubmit={e => handleRegister(e)}>
+          <input
+            type="email"
+            placeholder="email"
+            disabled={register && !registerOk ? true : false}
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
+          ></input>
+          <input
+            type="password"
+            placeholder="password"
+            disabled={register && !registerOk ? true : false}
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+          ></input>
+          <input
+            type="text"
+            placeholder="username"
+            disabled={register && !registerOk ? true : false}
+            onChange={(e) => setUsername(e.target.value)}
+            value={username}
+          ></input>
+          <input
+            type="url"
+            placeholder="picture url"
+            disabled={register && !registerOk ? true : false}
+            onChange={(e) => setPhoto(e.target.value)}
+            value={photo}
+          ></input>
+          {register && !registerOk ? (
+            <button disabled>
+              <ThreeDots
+                height="70"
+                width="80"
+                radius="9"
+                color="#fff"
+                ariaLabel="three-dots-loading"
+                wrapperStyle={{}}
+                wrapperClassName=""
+                visible={true}
+              />
+            </button>
+          ) : (
+            <button type="submit" style={{"cursor": "pointer"}}>Sign Up</button>
+          )}
+          <Link to="/">
+            <p onClick={() => navigate("/")}>
+              Switch back to log in
+            </p>
+          </Link>
+        </FormContainer>
+      </RegisterFormContainer>
+    </FrontPage>
   );
 }
-
-
 
 const RegisterFormContainer = styled.div`
   width: 100%;
@@ -101,9 +107,8 @@ const RegisterFormContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-
 `;
-const FormContainer = styled.div`
+const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
   align-content: center;
@@ -158,15 +163,13 @@ const FormContainer = styled.div`
     place-self: center;
   }
 
-  @media(max-width: 375px) {
-
+  @media (max-width: 375px) {
     height: 80%;
-    
-    input, button{
-    width: 330px;
-    height: 55px;
+
+    input,
+    button {
+      width: 330px;
+      height: 55px;
     }
-
-
   }
 `;
