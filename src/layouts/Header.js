@@ -56,6 +56,7 @@ export default function Header() {
         </Icons>
       </Head>
       <SubMenu ref={refSubMenu} show={showSubMenu}>
+        <p onClick={() => navigate("/user/" + userInfos.id)}>Your page</p>
         <p onClick={() => logout()}>Logout</p>
       </SubMenu>
     </>
@@ -120,11 +121,12 @@ const SubMenu = styled.div`
       return "none";
     }
   }};
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-around;
   align-items: center;
   background-color: #151515;
   width: 150px;
-  height: 45px;
+  height: 80px;
   border-radius: 0px 0px 20px 20px;
   p {
     color: white;
