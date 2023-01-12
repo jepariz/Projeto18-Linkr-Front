@@ -57,10 +57,8 @@ const SearchContainer = styled.div`
   display: flex;
   justify-content: center;
 
-  @media(min-width: 376px) {
-    
+  @media (min-width: 376px) {
     display: none;
-   
   }
 `;
 
