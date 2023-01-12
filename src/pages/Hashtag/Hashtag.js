@@ -32,7 +32,7 @@ export default function Hashtag() {
     );
   } else {
     if (posts.length === 0) {
-      renderPosts.push(<ZeroPost key="0">Não há post a ser mostrado!</ZeroPost>);
+      renderPosts.push(<ZeroPost key="0">There aren't posts to show!</ZeroPost>);
     } else {
       posts.map((post) => renderPosts.push(<Post key={post.id} data={post} />));
     }

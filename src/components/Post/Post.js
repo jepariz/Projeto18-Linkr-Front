@@ -5,7 +5,6 @@ import axios from "axios";
 import { deletePostById, updatePostById } from "../../api/post";
 import DeleteButton from "./DeleteButton/DeleteButton";
 import EditButton from "./EditButton/EditButton";
-import ModalDelete from "../ModalDelete/ModalDelete";
 import {
   Photo,
   PostContainer,
