@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
 import ReactModal from "react-modal";
-import { Button, ButtonGroup, Title } from "./ModalDelete.style";
+import { Button, ButtonGroup, Title } from "./ConfirmModal.style";
 
-export default function ModalDelete({ deleteModeState, deletePost }) {
-  const [deleteMode, setDeleteMode] = deleteModeState;
-  const [visible, setVisible] = useState(false);
+export default function ConfirmModal({ visibleState, confirmFn, text }) {
+  const [visible, setVisible] = visibleState;
   const [disabled, setDisabled] = useState(false);
 
   function removeBodyOverlay() {
@@ -16,14 +15,13 @@ export default function ModalDelete({ deleteModeState, deletePost }) {
     document.querySelector("body").style = "overflow: unset";
   }
 
-  function handleDelete() {
+  function handleConfirm() {
     setVisible(true);
     setDisabled(true);
-    deletePost(
+    confirmFn(
       () => {
         setVisible(false);
         setDisabled(false);
-        setDeleteMode(false);
       },
       () => {
         setVisible(false);
@@ -34,32 +32,30 @@ export default function ModalDelete({ deleteModeState, deletePost }) {
 
   return (
     <ReactModal
-      isOpen={deleteMode}
+      isOpen={visible}
       onAfterOpen={removeBodyOverlay}
       onAfterClose={addBodyOverlay}
       overlayClassName={"modal-overlay"}
       className={"modal-content"}
       ariaHideApp={false}
     >
-      <Title>
-        Are you sure you want <br /> to delete this post?
-      </Title>
+      <Title>{text.title}</Title>
       <ButtonGroup>
         <Button
           disabled={disabled}
           blue={false}
-          onClick={() => setDeleteMode(false)}
+          onClick={() => setVisible(false)}
         >
-          No, go back
+          {text.cancelText}
         </Button>
-        <Button disabled={disabled} blue={true} onClick={handleDelete}>
-          {!visible ? "Yes, delete it " : ""}
+        <Button disabled={disabled} blue={true} onClick={handleConfirm}>
+          {!disabled ? text.confirmText : ""}
           <ThreeDots
             height="18"
             width="80"
             color="#fff"
             ariaLabel="three-dots-loading"
-            visible={visible}
+            visible={disabled}
           />
         </Button>
       </ButtonGroup>
