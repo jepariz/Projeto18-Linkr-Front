@@ -5,11 +5,15 @@ export default function Results({users, term}) {
 
     const navigate = useNavigate();
 
+    function handleResult(id){
+      navigate(`/user/${id}`)
+    }
+
   return (
     <ResultsContainer show={term.length >= 3}>
         <UserInfo>
             {users.map((u, index) => (
-                <div  key={index} onClick={navigate(`/user/${u.id}`)}> 
+                <div  key={index} onClick={() => handleResult(u.id)}> 
                 <img src={u.photo}></img>
                 <p>{u.username}</p>
                 </div>
