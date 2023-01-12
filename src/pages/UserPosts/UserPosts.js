@@ -20,16 +20,28 @@ export default function UserPosts() {
   let { id } = useParams();
   const [posts, setPosts] = useState([]);
   const [timelinePostsStep, setTimelinePostsStep] = useState(0);
-  const [user, setUser] = useState({username: "Loading...", photo: "https://yorkdalelincoln.com/wp-content/themes/lbx-iag/resources/images/spinner.gif"});
+  const [user, setUser] = useState({
+    username: "Loading...",
+    photo:
+      "https://yorkdalelincoln.com/wp-content/themes/lbx-iag/resources/images/spinner.gif",
+  });
 
   function loadPosts() {
     setTimelinePostsStep(0);
     getUserPosts(id)
       .then(({ data }) => {
-        if(data.user.length===0) {
-          setUser({username: "Not Found", photo: "https://rukminim1.flixcart.com/image/416/416/kzx1a4w0/sticker/m/r/i/medium-404-error-not-found-0-1-an-sb6528-sign-ever-original-imagbtu8ztxntpkx.jpeg?q=70"});
+        console.log(data);
+        if (data.user.length === 0) {
+          setUser({
+            username: "Not Found",
+            photo:
+              "https://rukminim1.flixcart.com/image/416/416/kzx1a4w0/sticker/m/r/i/medium-404-error-not-found-0-1-an-sb6528-sign-ever-original-imagbtu8ztxntpkx.jpeg?q=70",
+          });
         } else {
-          setUser({username: data.user[0].username+"'s posts", photo: data.user[0].photo});
+          setUser({
+            username: data.user[0].username + "'s posts",
+            photo: data.user[0].photo,
+          });
         }
         setPosts(() => data.posts);
         if (data.posts.length === 0) {
@@ -58,7 +70,10 @@ export default function UserPosts() {
     <MainLayout>
       <Container>
         <TopContainer>
-          <UserPhoto src={user.photo} alt="Não foi possível carregar a imagem"/>
+          <UserPhoto
+            src={user.photo}
+            alt="Não foi possível carregar a imagem"
+          />
           <PageTitle>{user.username}</PageTitle>
         </TopContainer>
         <SubContainer>

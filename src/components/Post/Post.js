@@ -13,11 +13,16 @@ import {
   ButtonsGroup,
   Like,
   PhotoLikeGroup,
+  InfoLike,
+  RepostContainer,
+  Container,
 } from "./Post.style";
 import UrlMetadata from "./UrlMetadata/UrlMetadata";
-import UserPosts from "../../pages/UserPosts/UserPosts";
 import { useNavigate } from "react-router-dom";
 import URL_back from "../../utils/URL_back";
+import Tooltip from "react-tooltip";
+import RepostButton from "./RepostButton/RepostButton";
+import { FaRetweet } from "react-icons/fa";
 
 export default function Post({ data, reload }) {
   const {
@@ -30,10 +35,14 @@ export default function Post({ data, reload }) {
     title,
     image,
     description,
+    repost_times,
+    repost_by,
   } = data;
   const editMode = useState(false);
-  const deleteMode = useState(false);
   const navigate = useNavigate();
+  const [auxArray, setAuxArray] = useState([]);
+  const [tooltip, showTooltip] = useState(true);
+  const [isLiked, setIsLiked] = useState(false);
 
   function isAuthenticatedUserPost() {
     return JSON.parse(localStorage.user).username === username;
@@ -62,11 +71,63 @@ export default function Post({ data, reload }) {
       });
   }
 
+  useEffect(() => {
+    getLikes(id, username);
+  }, [isLiked]);
+
+  function getLikes(id, username) {
+    let postId = id;
+    axios
+      .get(
+        `${URL_back}likeList/${postId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${JSON.parse(localStorage.user).token}`,
+          },
+        },
+        { postId }
+      )
+      .then((likesAndNames) => getLikesFromServer(likesAndNames))
+      .catch((err) => console.log(err));
+  }
+
+  function getLikesFromServer(likesAndNames) {
+    let usernameLocal = JSON.parse(localStorage.user).username;
+    let newLst = [];
+    likesAndNames.data.users?.map((u) => newLst.push(u.username));
+    if (!newLst) {
+      setAuxArray([""]);
+    } else if (newLst.length === 1 && newLst.find((e) => e !== usernameLocal)) {
+      return setAuxArray([newLst[0], "curtiu isso"]);
+    } else if (newLst.find((e) => e === usernameLocal) && newLst.length === 1) {
+      setAuxArray(["Você curtiu isso"]);
+    } else if (newLst.find((e) => e === usernameLocal) && newLst.length === 2) {
+      setAuxArray([`Você e ${newLst[0]} curtiram este post`]);
+    } else if (newLst.find((e) => e === usernameLocal) && newLst.length > 2) {
+      setAuxArray([
+        `
+        Você,
+        ${newLst[0]}
+         e mais
+        ${[newLst.length - 2]}
+        curtiram este post`,
+      ]);
+    } else if (newLst.find((e) => e !== usernameLocal) && newLst.length === 2) {
+      setAuxArray([`${newLst[0]}, ${newLst[1]} curtiram este post`]);
+    } else if (newLst.find((e) => e !== usernameLocal) && newLst.length > 2) {
+      setAuxArray([
+        `${newLst[0]}, ${newLst[1]} e mais ${
+          newLst.length - 2
+        } curtiram este post`,
+      ]);
+    } else if (newLst.find((e) => e !== usernameLocal) && newLst.length === 1) {
+      setAuxArray([`${newLst[0]} curtiu este post.`]);
+    }
+  }
+
   // LIKE
 
   let post_id = id;
-
-  const [isLiked, setIsLiked] = useState(false);
 
   useEffect(() => {
     axios
@@ -77,7 +138,7 @@ export default function Post({ data, reload }) {
       })
       .then((e) => setIsLiked(e.data.liked))
       .catch((e) => console.log(e.response.data.message));
-  }, [post_id]);
+  }, []);
 
   function likePost() {
     if (isLiked) {
@@ -115,32 +176,63 @@ export default function Post({ data, reload }) {
 
   // RENDER
   return (
-    <PostContainer>
-      <PhotoLikeGroup>
-        <Photo src={photo} onClick={() => navigate(`/user/${user_id}`)} />
-        <Like onClick={() => likePost()}>
-          {isLiked ? (
-            <AiFillHeart fontSize={22} color={"#AC0000"} />
-          ) : (
-            <AiOutlineHeart fontSize={22} color={"#fff"} />
-          )}
-        </Like>
-      </PhotoLikeGroup>
-      <Username onClick={() => navigate(`/user/${user_id}`)}>
-        {username}{" "}
-      </Username>
-      {isAuthenticatedUserPost() ? (
-        <ButtonsGroup>
-          <EditButton editModeState={editMode} />
-          <DeleteButton deleteModeState={deleteMode} />
-        </ButtonsGroup>
+    <Container>
+      {repost_by ? (
+        <RepostContainer>
+          <FaRetweet fontSize={20} color="#fff" />
+          <p>
+            Re-posted by
+            <b>
+              {" "}
+              {repost_by === JSON.parse(localStorage.user).username
+                ? "you"
+                : repost_by}
+            </b>
+          </p>
+        </RepostContainer>
       ) : (
         ""
       )}
+      <PostContainer>
+        <PhotoLikeGroup>
+          <Photo src={photo} onClick={() => navigate(`/user/${user_id}`)} />
+          {tooltip ? (
+            <Tooltip type="info" place="bottom" effect="solid" />
+          ) : null}
+          <InfoLike data-tip={auxArray}>
+            <Like
+              onClick={() => likePost()}
+              onMouseOver={() => {
+                showTooltip(true);
+              }}
+              onMouseLeave={() => {
+                showTooltip(false);
+              }}
+            >
+              {isLiked ? (
+                <AiFillHeart fontSize={22} color={"#AC0000"} />
+              ) : (
+                <AiOutlineHeart fontSize={22} color={"#fff"} />
+              )}
+            </Like>
+          </InfoLike>
+          <RepostButton re_post_times={repost_times} post_id={post_id} />
+        </PhotoLikeGroup>
+        <Username onClick={() => navigate(`/user/${user_id}`)}>
+          {username}{" "}
+        </Username>
+        {isAuthenticatedUserPost() ? (
+          <ButtonsGroup>
+            <EditButton editModeState={editMode} />
+            <DeleteButton deleteFn={deletePost} />
+          </ButtonsGroup>
+        ) : (
+          ""
+        )}
 
-      <Comment text={text} editModeState={editMode} update={updatePost} />
-      <UrlMetadata data={{ link, title, image, description }} />
-      <ModalDelete deletePost={deletePost} deleteModeState={deleteMode} />
-    </PostContainer>
+        <Comment text={text} editModeState={editMode} update={updatePost} />
+        <UrlMetadata data={{ link, title, image, description }} />
+      </PostContainer>
+    </Container>
   );
 }
