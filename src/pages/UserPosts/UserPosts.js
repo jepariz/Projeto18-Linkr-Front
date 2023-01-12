@@ -26,9 +26,10 @@ export default function UserPosts() {
   const [timelinePostsStep, setTimelinePostsStep] = useState(0);
   const [follow, setFollow] = useState(false);
   const [loadingFollow, setLoadingFollow] = useState(false);
-  const [user, setUser] = useState({username: "Loading...", photo: "https://yorkdalelincoln.com/wp-content/themes/lbx-iag/resources/images/spinner.gif"});
+  const [user, setUser] = useState({});
 
   function loadPosts() {
+    setUser({username: "Loading...", photo: "https://yorkdalelincoln.com/wp-content/themes/lbx-iag/resources/images/spinner.gif"});
     setTimelinePostsStep(0);
     initiateFollowButton();
     getUserPosts(id)
@@ -54,13 +55,13 @@ export default function UserPosts() {
 
   useEffect(() => {
     loadPosts();
-  }, []);
+  }, [id]);
 
   const [trending, setTrending] = useState([]);
 
   useEffect(() => {
     getTrending(setTrending);
-  }, []);
+  }, [id]);
 
   function initiateFollowButton() {
     setLoadingFollow(true);

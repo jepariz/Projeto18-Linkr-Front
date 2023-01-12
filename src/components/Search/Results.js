@@ -3,15 +3,16 @@ import styled from "styled-components"
 
 export default function Results({users, term}) {
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const user_id = JSON.parse(localStorage.getItem("user")).id;
 
   return (
     <ResultsContainer show={term.length >= 3}>
         <UserInfo>
             {users.map((u, index) => (
-                <div  key={index} onClick={navigate(`/user/${u.id}`)}> 
-                <img src={u.photo}></img>
-                <p>{u.username}</p>
+                <div  key={index} onClick={() => navigate(`/user/${u.id}`)}> 
+                  <img src={u.photo}></img>
+                  <p>{u.username}{u.isFollow ? <span> • following</span> : null}{u.id === user_id ? <span> • You</span> : null}</p>
                 </div>
            ))}
         </UserInfo>
@@ -50,6 +51,7 @@ div{
     display: flex;
     gap: 10px;
     align-items: center;
+    cursor: pointer;
 
     a{
         text-decoration: none;
@@ -66,5 +68,9 @@ img{
     width: 39px;
     height: 39px;
     border-radius: 50%;
+}
+
+span{
+  color: #C5C5C5;
 }
 `
