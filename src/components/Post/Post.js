@@ -5,7 +5,6 @@ import axios from "axios";
 import { deletePostById, updatePostById } from "../../api/post";
 import DeleteButton from "./DeleteButton/DeleteButton";
 import EditButton from "./EditButton/EditButton";
-import ModalDelete from "../ModalDelete/ModalDelete";
 import {
   Photo,
   PostContainer,
@@ -14,12 +13,15 @@ import {
   Like,
   PhotoLikeGroup,
   InfoLike,
+  RepostContainer,
+  Container,
 } from "./Post.style";
 import UrlMetadata from "./UrlMetadata/UrlMetadata";
-import UserPosts from "../../pages/UserPosts/UserPosts";
 import { useNavigate } from "react-router-dom";
 import URL_back from "../../utils/URL_back";
-import  Tooltip  from "react-tooltip";
+import Tooltip from "react-tooltip";
+import RepostButton from "./RepostButton/RepostButton";
+import { FaRetweet } from "react-icons/fa";
 
 export default function Post({ data, reload }) {
   const {
@@ -32,9 +34,10 @@ export default function Post({ data, reload }) {
     title,
     image,
     description,
+    repost_times,
+    repost_by,
   } = data;
   const editMode = useState(false);
-  const deleteMode = useState(false);
   const navigate = useNavigate();
   const [auxArray, setAuxArray] = useState([]);
   const [tooltip, showTooltip] = useState(true);
@@ -75,7 +78,7 @@ export default function Post({ data, reload }) {
     let postId = id;
     axios
       .get(
-        `http://localhost:4000/likeList/${postId}`,
+        `${URL_back}likeList/${postId}`,
         {
           headers: {
             Authorization: `Bearer ${JSON.parse(localStorage.user).token}`,
@@ -172,44 +175,63 @@ export default function Post({ data, reload }) {
 
   // RENDER
   return (
-    <PostContainer>
-      <PhotoLikeGroup>
-        <Photo src={photo} onClick={() => navigate(`/user/${user_id}`)} />
-
-        {tooltip ? <Tooltip type="info" place="bottom" effect="solid" /> : null}
-        <InfoLike data-tip={auxArray}>
-          <Like
-            onClick={() => likePost()}
-            onMouseOver={() => {
-              showTooltip(true);
-            }}
-            onMouseLeave={() => {
-              showTooltip(false);
-            }}
-          >
-            {isLiked ? (
-              <AiFillHeart fontSize={22} color={"#AC0000"} />
-            ) : (
-              <AiOutlineHeart fontSize={22} color={"#fff"} />
-            )}
-          </Like>
-        </InfoLike>
-      </PhotoLikeGroup>
-      <Username onClick={() => navigate(`/user/${user_id}`)}>
-        {username}{" "}
-      </Username>
-      {isAuthenticatedUserPost() ? (
-        <ButtonsGroup>
-          <EditButton editModeState={editMode} />
-          <DeleteButton deleteModeState={deleteMode} />
-        </ButtonsGroup>
+    <Container>
+      {repost_by ? (
+        <RepostContainer>
+          <FaRetweet fontSize={20} color="#fff" />
+          <p>
+            Re-posted by
+            <b>
+              {" "}
+              {repost_by === JSON.parse(localStorage.user).username
+                ? "you"
+                : repost_by}
+            </b>
+          </p>
+        </RepostContainer>
       ) : (
         ""
       )}
+      <PostContainer>
+        <PhotoLikeGroup>
+          <Photo src={photo} onClick={() => navigate(`/user/${user_id}`)} />
+          {tooltip ? (
+            <Tooltip type="info" place="bottom" effect="solid" />
+          ) : null}
+          <InfoLike data-tip={auxArray}>
+            <Like
+              onClick={() => likePost()}
+              onMouseOver={() => {
+                showTooltip(true);
+              }}
+              onMouseLeave={() => {
+                showTooltip(false);
+              }}
+            >
+              {isLiked ? (
+                <AiFillHeart fontSize={22} color={"#AC0000"} />
+              ) : (
+                <AiOutlineHeart fontSize={22} color={"#fff"} />
+              )}
+            </Like>
+          </InfoLike>
+          <RepostButton re_post_times={repost_times} post_id={post_id} />
+        </PhotoLikeGroup>
+        <Username onClick={() => navigate(`/user/${user_id}`)}>
+          {username}{" "}
+        </Username>
+        {isAuthenticatedUserPost() ? (
+          <ButtonsGroup>
+            <EditButton editModeState={editMode} />
+            <DeleteButton deleteFn={deletePost} />
+          </ButtonsGroup>
+        ) : (
+          ""
+        )}
 
-      <Comment text={text} editModeState={editMode} update={updatePost} />
-      <UrlMetadata data={{ link, title, image, description }} />
-      <ModalDelete deletePost={deletePost} deleteModeState={deleteMode} />
-    </PostContainer>
+        <Comment text={text} editModeState={editMode} update={updatePost} />
+        <UrlMetadata data={{ link, title, image, description }} />
+      </PostContainer>
+    </Container>
   );
 }

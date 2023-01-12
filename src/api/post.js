@@ -6,7 +6,8 @@ export function updatePostById({ id, comment }) {
     `${URL_back}post/${id}`,
     {
       comment,
-    }, {
+    },
+    {
       headers: {
         Authorization: `Bearer ${JSON.parse(localStorage.user).token}`,
       },
@@ -28,4 +29,16 @@ export function deletePostById(id) {
       Authorization: `Bearer ${JSON.parse(localStorage.user).token}`,
     },
   });
+}
+
+export function repostPost(post_id) {
+  return axios.post(
+    URL_back + "repost/" + post_id,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${JSON.parse(localStorage.user).token}`,
+      },
+    }
+  );
 }

@@ -99,7 +99,9 @@ table {
   }
 }
 
-
+.hide {
+	display: none !important;
+}
 `;
 
 export default GlobalStyle;

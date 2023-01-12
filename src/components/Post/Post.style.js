@@ -5,8 +5,6 @@ export const PostContainer = styled.div`
   padding: 15px;
   background-color: #171717;
   display: grid;
-  
-
   grid-template-columns: auto minmax(0, 1fr) auto;
   grid-template-rows: auto auto auto;
 
@@ -24,6 +22,7 @@ export const PhotoLikeGroup = styled.div`
   align-items: center;
   grid-column: 1/2;
   grid-row: 1/4;
+  gap: 20px;
 `;
 
 export const Photo = styled.img`
@@ -45,9 +44,6 @@ export const Like = styled.div`
   width: 20px;
   height: 40px;
   margin: auto;
-  margin-top: 19px;
-  
-  
 `;
 
 export const InfoLike = styled.span`
@@ -58,7 +54,6 @@ export const InfoLike = styled.span`
   font-size: 11px;
   line-height: 13px;
   text-align: center;
-  
 `;
 
 export const Username = styled.div`
@@ -89,4 +84,30 @@ export const ButtonsGroup = styled.div`
     padding: 0;
     cursor: pointer;
   }
+`;
+
+export const RepostContainer = styled.div`
+  display: flex;
+  gap: 10px;
+  padding: 10px 15px;
+  background-color: #1e1e1e;
+  border-radius: 16px;
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 11px;
+  color: #ffffff;
+  align-items: center;
+
+  b {
+    color: #fff;
+    font-weight: 700;
+  }
+`;
+
+export const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: #1e1e1e;
+  border-radius: 16px;
 `;
