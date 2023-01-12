@@ -22,7 +22,17 @@ export default function UserSearch() {
         })
       
         promise.then((res) => {
-          setUsers(res.data)})
+          const followed = [];
+          const notFollowed = [];
+          res.data.forEach(u => {
+            if(u.isFollow) {
+              followed.push(u)
+            } else {
+              notFollowed.push(u)
+            }
+          })
+          setUsers([...followed, ...notFollowed]);
+        })
 
         promise.catch((err) => {
           alert(err.response.data);
