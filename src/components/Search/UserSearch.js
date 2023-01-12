@@ -24,7 +24,7 @@ export default function UserSearch() {
         promise.then((res) => {
           const followed = [];
           const notFollowed = [];
-          res.data.map(u => {
+          res.data.forEach(u => {
             if(u.isFollow) {
               followed.push(u)
             } else {

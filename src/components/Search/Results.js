@@ -11,7 +11,7 @@ export default function Results({users, term}) {
         <UserInfo>
             {users.map((u, index) => (
                 <div  key={index} onClick={() => navigate(`/user/${u.id}`)}> 
-                  <img src={u.photo}></img>
+                  <img src={u.photo} alt="An error ocurred while try to render. Please refresh the page."></img>
                   <p>{u.username}{u.isFollow ? <span> • following</span> : null}{u.id === user_id ? <span> • You</span> : null}</p>
                 </div>
            ))}
