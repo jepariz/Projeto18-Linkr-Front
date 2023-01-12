@@ -13,6 +13,7 @@ import {
   PageTitle,
   PostList,
   SubContainer,
+  ZeroPost,
 } from "./styles";
 
 export default function Timeline() {
@@ -23,10 +24,13 @@ export default function Timeline() {
     setTimelinePostsStep(0);
     getLast20Posts()
       .then(({ data }) => {
-        setPosts(() => data);
-        if (data.length === 0) {
-          alert("There are no posts yet");
-          setTimelinePostsStep(2);
+        setPosts(() => data.posts);
+        if (data.posts.length === 0) {
+          if(data.follows.length === 0) {
+            setTimelinePostsStep(2);
+          } else {
+            setTimelinePostsStep(3);
+          }
         } else setTimelinePostsStep(1);
       })
       .catch((error) =>
@@ -41,7 +45,6 @@ export default function Timeline() {
   }, []);
   const [trending, setTrending] = useState([]);
   useEffect(() => {
-    getPosts(setPosts);
     getTrending(setTrending);
   }, []);
 
@@ -59,7 +62,8 @@ export default function Timeline() {
                   posts.map((post) => (
                     <Post key={post.id} data={post} reload={loadPosts} />
                   )),
-                  "",
+                  <ZeroPost>You don't follow anyone yet. Search for new friends!</ZeroPost>,
+                  <ZeroPost>No posts found from your friends!</ZeroPost>
                 ][timelinePostsStep]
               }
             </PostList>
