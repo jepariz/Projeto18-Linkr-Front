@@ -63,7 +63,38 @@ export const ZeroPost = styled.div`
 `;
 
 export const TopContainer = styled.div`
+  width: 100%;
   display: flex;
+  justify-content: space-between;
+`;
+
+export const Follow = styled.button`
+  width: 115px;
+  height: 30px;
+  background-color: ${(props) => {
+    if (!props.follow) return "#1877F2";
+    else return "white";
+  }};
+  color: ${(props) => {
+    if (props.follow) return "#1877F2";
+    else return "white";
+  }};
+  font-family: "Lato";
+  font-size: 14px;
+  font-weight: bold;
+  cursor: ${props => {
+    if(props.loadingFollow) return "normal";
+    else return "pointer";
+  }};
+  border: none;
+  border-radius: 5px;
+  opacity: ${props => {
+    if(props.loadingFollow) return "0.5";
+    else return "1";
+  }};
+  @media (max-width: 1024px) {
+    margin-right: 20px;
+  }
 `;
 
 export const UserPhoto = styled.img`
@@ -78,3 +109,7 @@ export const UserPhoto = styled.img`
     height: 50px;
   }
 `;
+
+export const TitleContainer = styled.div`
+  display: flex;
+`
