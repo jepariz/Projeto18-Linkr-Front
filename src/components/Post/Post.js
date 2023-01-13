@@ -15,6 +15,8 @@ import {
   InfoLike,
   RepostContainer,
   Container,
+  CommentNumber,
+  CommentContainer,
 } from "./Post.style";
 import UrlMetadata from "./UrlMetadata/UrlMetadata";
 import { useNavigate } from "react-router-dom";
@@ -23,6 +25,7 @@ import Tooltip from "react-tooltip";
 import RepostButton from "./RepostButton/RepostButton";
 import { FaRetweet } from "react-icons/fa";
 import PostComment from "./PostComments/PostComment";
+
 
 
 export default function Post({ data, reload }) {
@@ -45,6 +48,9 @@ export default function Post({ data, reload }) {
   const [tooltip, showTooltip] = useState(true);
   const [isLiked, setIsLiked] = useState(false);
   const [comment, setComment] = useState(false)
+  const [comments, setComments] = useState([])
+  const [isFollower, setIsFollower] = useState([])
+ 
 
   function isAuthenticatedUserPost() {
     return JSON.parse(localStorage.user).username === username;
@@ -176,7 +182,32 @@ export default function Post({ data, reload }) {
     }
   }
 
-  console.log(comment)
+  function getComments (id){
+
+    const user = JSON.parse(localStorage.user).id
+      const promise = axios.get(`${URL_back}posts/${id}/comments`, {
+        headers: {
+          Authorization: `Bearer ${JSON.parse(localStorage.user).token}`,
+          userId: user
+        }
+      });
+       
+         promise.then((res) => {
+           setComments(res.data)
+         })
+ 
+         promise.catch((err) => {
+           alert(err.response.data);
+         }); 
+
+}
+
+useEffect(() => {
+
+getComments(id)
+    
+}, []);
+
 
   // RENDER
   return (
@@ -221,7 +252,11 @@ export default function Post({ data, reload }) {
               )}
             </Like>
           </InfoLike>
+          <CommentContainer>
           <AiOutlineComment fontSize={22} color={'#fff'} onClick={()=> setComment(true)}/>
+          {comments.length + " Comments"}
+          </CommentContainer>
+          
           <RepostButton re_post_times={repost_times} post_id={post_id} />
         </PhotoLikeGroup>
         <Username onClick={() => navigate(`/user/${user_id}`)}>
@@ -239,7 +274,7 @@ export default function Post({ data, reload }) {
         <Comment text={text} editModeState={editMode} update={updatePost} />
         <UrlMetadata data={{ link, title, image, description }} />
       </PostContainer>
-      {comment ? <PostComment id={id} postAuthor={user_id} authorPhoto={photo} authorName={username}/> : null}
+      {comment ? <PostComment id={id} postAuthor={user_id} authorPhoto={photo} authorName={username} isFollower={isFollower} comments={comments} setComments={setComments}/> : null}
     </Container>
    
     </>

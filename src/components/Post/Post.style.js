@@ -112,3 +112,21 @@ export const Container = styled.div`
   border-radius: 16px;
   position: absolute;
 `;
+
+
+export const CommentContainer = styled.button`
+margin-top: 10px;
+ display: flex;
+  width: auto;
+  background: none;
+  border: none;
+  outline: none;
+  flex-direction: column;
+  gap: 3px;
+  align-items: center;
+  font-family: "Lato";
+  font-size: 11px;
+  text-align: center;
+  color: #ffffff;
+  cursor: pointer;
+`

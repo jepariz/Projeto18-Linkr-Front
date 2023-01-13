@@ -1,56 +1,34 @@
-import axios from "axios";
-import React, { useState } from "react";
 import styled from "styled-components";
-import URL_back from "../../../utils/URL_back";
-import Comment from "./Comment";
 import CommentInput from "./CommentInput";
 
 
-export default function PostComment({id, postAuthor, authorPhoto, authorName}) {
-
-    const [users, setUsers] = useState([])
-
-function getComments (id){
-    const promise = axios.get(`${URL_back}/comments/${id}`, 
-         {
-           headers: {
-             Authorization: `Bearer ${JSON.parse(localStorage.user).token}`,
-           },
-         })
-       
-         promise.then((res) => {
-           const followed = [];
-           const notFollowed = [];
-           res.data.forEach(u => {
-             if(u.isFollow) {
-               followed.push(u)
-             } else {
-               notFollowed.push(u)
-             }
-           })
-           setUsers([...followed, ...notFollowed]);
-         })
- 
-         promise.catch((err) => {
-           alert(err.response.data);
-         }); 
-}
-
+export default function PostComment({id, postAuthor, comments, setComments}) {
 
 
   return (
     <CommentsContainer>
-      <Comment />
-      <Comment />
-      <Comment />
-      <Comment />
-    <CommentInput/>
+    {comments.map((c, index) =>  
+    <div key={index}>
+    <CommentContent>
+           <img src={c.photo} alt="user avatar"></img>
+           <TextContainer>
+            <div>
+                <p>{c.name}</p>
+               {c.id === postAuthor ? <span>• post’s author</span> : c.isFollower ? <span> • following</span> : null } 
+            </div>
+            <p>{c.text}</p>
+    </TextContainer>
+    </CommentContent>
+    <Line></Line> 
+    </div>)}
+    
+    <CommentInput id={id} setComments={setComments}/>
     </CommentsContainer>
   );
 }
 
 const CommentsContainer = styled.div`
-  width: 611px;
+  width: 601px;
   height: auto;
   background-color: #1e1e1e;
   border-radius: 16px;
@@ -60,4 +38,58 @@ const CommentsContainer = styled.div`
   gap: 10px;
   margin-block-start: 10px;
   position: relative;
+  margin-left: 10px;
 `;
+
+const CommentContent = styled.div`
+width: 100%;
+height: 50px;
+display: flex;
+align-items: center;
+gap: 20px;
+color: #fff;
+
+img{
+    width: 39px;
+    height: 39px;
+    border-radius: 50%;
+}
+
+`
+
+const TextContainer = styled.div`
+width: 100%;
+height: auto;
+display: flex;
+flex-direction: column;
+justify-content: center;
+gap: 5px;
+
+div{
+    display: flex;
+    gap: 8px;
+    p{
+        font-size: 14px;
+        color: #F3F3F3;
+        font-size: "Lato", sans-serif;
+    }
+
+    span{
+        font-size: 14px;
+        color: #565656;
+        font-size: "Lato", sans-serif;
+    }
+}
+
+p{
+  font-size: 14px;
+        color: #ACACAC;
+        font-size: "Lato", sans-serif;
+}
+
+`
+const Line = styled.div`
+    width: 571px;
+    border: 1px solid #353535;
+
+`

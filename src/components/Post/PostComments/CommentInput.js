@@ -1,45 +1,68 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { FiSend } from "react-icons/fi";
 import URL_back from "../../../utils/URL_back";
 import axios from "axios";
 
-export default function CommentInput() {
+export default function CommentInput({ id, setComments}) {
+  const [inputValue, setInputValue] = useState("");
+  const [newComment, setNewComment] = useState(false)
 
-    const [inputValue, setInputValue] = useState('');
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      submitComment();
+    }
+  };
 
-    const handleKeyPress = (event) => {
-       
-        if (event.key === 'Enter') {
-          submitComment();
-        }
-      };
-    
-    const submitComment = () => {
-
+  const submitComment = () => {
     const promise = axios.post(URL_back + "comments", {
-      comment: inputValue,
-      user_id: JSON.parse(localStorage.getItem("user")).id,
-    });
+      post_id: id,
+      text: inputValue,
+      author_id: JSON.parse(localStorage.getItem("user")).id,
+    },{
+        headers: {
+          Authorization: `Bearer ${JSON.parse(localStorage.user).token}`,
+        },
+      });
     promise.then((res) => {
-      console.log(res.data)
+      setNewComment(true)
     });
 
     promise.catch((err) => {
       alert(err.message);
     });
-      };
+  };
 
+  useEffect(() => {
+
+    if(newComment){
+      const promise = axios.get(`${URL_back}posts/${id}/comments`, {
+        headers: {
+          Authorization: `Bearer ${JSON.parse(localStorage.user).token}`,
+        },
+      });
+       
+         promise.then((res) => {
+           setComments(res.data)
+         })
+      
+         promise.catch((err) => {
+           alert(err.response.data);
+         }); 
+    }
+      
+ }, [newComment]);
 
   return (
     <PostCommentData>
-      <img src="https://1.bp.blogspot.com/-Wq2lcq9_a4I/Tc2lLWOkNVI/AAAAAAAABVM/Wao0rm-vWe4/s1600/gatinho-5755.jpg"></img>
+      <img src={JSON.parse(localStorage.user).photoUrl}></img>
       <InputContainer>
-        <NewComment placeholder="write a comment..."
-        type="text"
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-        onKeyPress={handleKeyPress}
+        <NewComment
+          placeholder="write a comment..."
+          type="text"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          onKeyPress={handleKeyPress}
         ></NewComment>
         <SendIcon
           type="submit"
