@@ -76,6 +76,13 @@ const Head = styled.div`
   padding: 0px 15px 0px 25px;
   box-sizing: border-box;
   z-index: 999;
+
+  @media(max-width: 375px) {
+    
+    padding: 0px 10px 0 15px;
+   
+  }
+
 `;
 
 const Icons = styled.div`
@@ -84,10 +91,22 @@ const Icons = styled.div`
   align-items: center;
   width: 90px;
   cursor: pointer;
+
+  @media(max-width: 375px) {
+    justify-content: center;
+    gap: 5px;
+   
+  }
   img {
     width: 50px;
     height: 50px;
     border-radius: 50%;
+
+    @media(max-width: 375px) {
+    
+    width: 45px;
+    height: 45px;
+  }
   }
 `;
 
@@ -124,4 +143,10 @@ const Logo = styled.h1 `
   font-size: 55px;
   font-weight: bold;
   cursor: pointer;
+
+  @media(max-width: 375px) {
+    
+    font-size: 45px;
+   
+  }
 `;
