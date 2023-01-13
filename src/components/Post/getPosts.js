@@ -23,7 +23,7 @@ export default function getPosts(
     setLoading(true);
     getPostsByHashtag(hashtag)
       .then(({ data }) => {
-        setPosts(() => data.posts);
+        setPosts(() => data);
         setLoading(false);
       })
       .catch((error) =>

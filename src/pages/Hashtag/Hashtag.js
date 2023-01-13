@@ -27,12 +27,12 @@ export default function Hashtag() {
 
   const renderPosts = [];
   if (loading) {
-    renderPosts.push(
-      <LoadingPosts key="1"/>
-    );
+    renderPosts.push(<LoadingPosts key="1" />);
   } else {
     if (posts.length === 0) {
-      renderPosts.push(<ZeroPost key="0">There aren't posts to show!</ZeroPost>);
+      renderPosts.push(
+        <ZeroPost key="0">There aren't posts to show!</ZeroPost>
+      );
     } else {
       posts.map((post) => renderPosts.push(<Post key={post.id} data={post} />));
     }
