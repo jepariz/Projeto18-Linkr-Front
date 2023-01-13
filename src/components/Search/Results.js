@@ -6,6 +6,10 @@ export default function Results({users, term}) {
   const navigate = useNavigate();
   const user_id = JSON.parse(localStorage.getItem("user")).id;
 
+    function handleResult(id){
+      navigate(`/user/${id}`)
+    }
+
   return (
     <ResultsContainer show={term.length >= 3}>
         <UserInfo>

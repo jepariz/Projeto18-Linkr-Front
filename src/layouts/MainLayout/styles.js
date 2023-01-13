@@ -6,4 +6,10 @@ export const ChildrenContainer = styled.div`
   background-color: #333333;
   margin-top: 70px;
   min-height: calc(100vh - 70px);
+
+  @media(max-width: 375px) {
+    
+    margin-top: 0;
+   
+  }
 `;
