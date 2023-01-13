@@ -1,9 +1,43 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
 import styled from "styled-components";
+import URL_back from "../../../utils/URL_back";
 import Comment from "./Comment";
 import CommentInput from "./CommentInput";
 
-export default function PostComment() {
+
+export default function PostComment({id, postAuthor, authorPhoto, authorName}) {
+
+    const [users, setUsers] = useState([])
+
+function getComments (id){
+    const promise = axios.get(`${URL_back}/comments/${id}`, 
+         {
+           headers: {
+             Authorization: `Bearer ${JSON.parse(localStorage.user).token}`,
+           },
+         })
+       
+         promise.then((res) => {
+           const followed = [];
+           const notFollowed = [];
+           res.data.forEach(u => {
+             if(u.isFollow) {
+               followed.push(u)
+             } else {
+               notFollowed.push(u)
+             }
+           })
+           setUsers([...followed, ...notFollowed]);
+         })
+ 
+         promise.catch((err) => {
+           alert(err.response.data);
+         }); 
+}
+
+
+
   return (
     <CommentsContainer>
       <Comment />

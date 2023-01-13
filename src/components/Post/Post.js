@@ -239,7 +239,7 @@ export default function Post({ data, reload }) {
         <Comment text={text} editModeState={editMode} update={updatePost} />
         <UrlMetadata data={{ link, title, image, description }} />
       </PostContainer>
-      {comment ? <PostComment/> : null}
+      {comment ? <PostComment id={id} postAuthor={user_id} authorPhoto={photo} authorName={username}/> : null}
     </Container>
    
     </>
