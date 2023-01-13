@@ -29,8 +29,8 @@ export default function CreatePost({ setPosts, setTrending }) {
         setLink("");
         setText("");
         setIsProcessing(false);
-        getPosts(setPosts);
-        getTrending(setTrending);
+        //getPosts(setPosts);
+        //getTrending(setTrending);
       })
       .catch(() => {
         alert("Houve um erro ao publicar seu link");

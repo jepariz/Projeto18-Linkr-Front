@@ -26,8 +26,6 @@ import RepostButton from "./RepostButton/RepostButton";
 import { FaRetweet } from "react-icons/fa";
 import PostComment from "./PostComments/PostComment";
 
-
-
 export default function Post({ data, reload }) {
   const {
     id,
@@ -47,10 +45,9 @@ export default function Post({ data, reload }) {
   const [auxArray, setAuxArray] = useState([]);
   const [tooltip, showTooltip] = useState(true);
   const [isLiked, setIsLiked] = useState(false);
-  const [comment, setComment] = useState(false)
-  const [comments, setComments] = useState([])
-  const [isFollower, setIsFollower] = useState([])
- 
+  const [comment, setComment] = useState(false);
+  const [comments, setComments] = useState([]);
+  const [isFollower, setIsFollower] = useState([]);
 
   function isAuthenticatedUserPost() {
     return JSON.parse(localStorage.user).username === username;
@@ -182,101 +179,109 @@ export default function Post({ data, reload }) {
     }
   }
 
-  function getComments (id){
+  function getComments(id) {
+    const user = JSON.parse(localStorage.user).id;
+    const promise = axios.get(`${URL_back}posts/${id}/comments`, {
+      headers: {
+        Authorization: `Bearer ${JSON.parse(localStorage.user).token}`,
+        userId: user,
+      },
+    });
 
-    const user = JSON.parse(localStorage.user).id
-      const promise = axios.get(`${URL_back}posts/${id}/comments`, {
-        headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.user).token}`,
-          userId: user
-        }
-      });
-       
-         promise.then((res) => {
-           setComments(res.data)
-         })
- 
-         promise.catch((err) => {
-           alert(err.response.data);
-         }); 
+    promise.then((res) => {
+      setComments(res.data);
+    });
 
-}
+    promise.catch((err) => {
+      alert(err.response.data);
+    });
+  }
 
-useEffect(() => {
-
-getComments(id)
-    
-}, []);
-
+  useEffect(() => {
+    getComments(id);
+  }, []);
 
   // RENDER
   return (
     <>
-    <Container>
-      {repost_by ? (
-        <RepostContainer>
-          <FaRetweet fontSize={20} color="#fff" />
-          <p>
-            Re-posted by
-            <b>
-              {" "}
-              {repost_by === JSON.parse(localStorage.user).username
-                ? "you"
-                : repost_by}
-            </b>
-          </p>
-        </RepostContainer>
-      ) : (
-        ""
-      )}
-      <PostContainer>
-        <PhotoLikeGroup>
-          <Photo src={photo} onClick={() => navigate(`/user/${user_id}`)} />
-          {tooltip ? (
-            <Tooltip type="info" place="bottom" effect="solid" />
-          ) : null}
-          <InfoLike data-tip={auxArray}>
-            <Like
-              onClick={() => likePost()}
-              onMouseOver={() => {
-                showTooltip(true);
-              }}
-              onMouseLeave={() => {
-                showTooltip(false);
-              }}
-            >
-              {isLiked ? (
-                <AiFillHeart fontSize={22} color={"#AC0000"} />
-              ) : (
-                <AiOutlineHeart fontSize={22} color={"#fff"} />
-              )}
-            </Like>
-          </InfoLike>
-          <CommentContainer>
-          <AiOutlineComment fontSize={22} color={'#fff'} onClick={()=> setComment(true)}/>
-          {comments.length + " Comments"}
-          </CommentContainer>
-          
-          <RepostButton re_post_times={repost_times} post_id={post_id} />
-        </PhotoLikeGroup>
-        <Username onClick={() => navigate(`/user/${user_id}`)}>
-          {username}{" "}
-        </Username>
-        {isAuthenticatedUserPost() ? (
-          <ButtonsGroup>
-            <EditButton editModeState={editMode} />
-            <DeleteButton deleteFn={deletePost} />
-          </ButtonsGroup>
+      <Container>
+        {repost_by ? (
+          <RepostContainer>
+            <FaRetweet fontSize={20} color="#fff" />
+            <p>
+              Re-posted by
+              <b>
+                {" "}
+                {repost_by === JSON.parse(localStorage.user).username
+                  ? "you"
+                  : repost_by}
+              </b>
+            </p>
+          </RepostContainer>
         ) : (
           ""
         )}
+        <PostContainer>
+          <PhotoLikeGroup>
+            <Photo src={photo} onClick={() => navigate(`/user/${user_id}`)} />
+            {tooltip ? (
+              <Tooltip type="info" place="bottom" effect="solid" />
+            ) : null}
+            <InfoLike data-tip={auxArray}>
+              <Like
+                onClick={() => likePost()}
+                onMouseOver={() => {
+                  showTooltip(true);
+                }}
+                onMouseLeave={() => {
+                  showTooltip(false);
+                }}
+              >
+                {isLiked ? (
+                  <AiFillHeart fontSize={22} color={"#AC0000"} />
+                ) : (
+                  <AiOutlineHeart fontSize={22} color={"#fff"} />
+                )}
+              </Like>
+            </InfoLike>
+            <CommentContainer>
+              <AiOutlineComment
+                fontSize={22}
+                color={"#fff"}
+                onClick={() => setComment(!comment)}
+              />
+              {comments.length + " Comments"}
+            </CommentContainer>
 
-        <Comment text={text} editModeState={editMode} update={updatePost} />
-        <UrlMetadata data={{ link, title, image, description }} />
-      </PostContainer>
-      {comment ? <PostComment id={id} postAuthor={user_id} authorPhoto={photo} authorName={username} isFollower={isFollower} comments={comments} setComments={setComments}/> : null}
-    </Container>
-   
+            <RepostButton re_post_times={repost_times} post_id={post_id} />
+          </PhotoLikeGroup>
+          <Username onClick={() => navigate(`/user/${user_id}`)}>
+            {username}{" "}
+          </Username>
+          {isAuthenticatedUserPost() ? (
+            <ButtonsGroup>
+              <EditButton editModeState={editMode} />
+              <DeleteButton deleteFn={deletePost} />
+            </ButtonsGroup>
+          ) : (
+            ""
+          )}
+
+          <Comment text={text} editModeState={editMode} update={updatePost} />
+          <UrlMetadata data={{ link, title, image, description }} />
+        </PostContainer>
+        {comment ? (
+          <PostComment
+            id={id}
+            postAuthor={user_id}
+            authorPhoto={photo}
+            authorName={username}
+            isFollower={isFollower}
+            comments={comments}
+            setComments={setComments}
+          />
+        ) : null}
+      </Container>
     </>
   );
 }

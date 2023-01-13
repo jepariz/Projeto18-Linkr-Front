@@ -14,7 +14,6 @@ export const Container = styled.div`
   margin: 0 auto;
   flex-direction: column;
   padding: 20px 0;
-
   @media (min-width: 1024px) {
     padding: 70px 0;
     max-width: 937px;
@@ -67,16 +66,13 @@ export const UpdatePostsFromFollowed = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-
   width: 100%;
   background-color: #1877f2;
   height: 61px;
   border-radius: 16px;
-
   :hover {
     cursor: pointer;
   }
-
   p {
     margin-right: 15px;
     color: #fff;

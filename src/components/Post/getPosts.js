@@ -1,5 +1,5 @@
 import { getPostsByHashtag } from "../../api/hashtag";
-import { getLast20Posts } from "../../api/timeline";
+import { getLast10Posts } from "../../api/timeline";
 
 export default function getPosts(
   setPosts,
@@ -7,18 +7,14 @@ export default function getPosts(
   hashtag = ""
 ) {
   if (hashtag === "") {
-    getLast20Posts()
+    getLast10Posts()
       .then(({ data }) => {
         setPosts(() => data);
         if (data.length === 0) {
           alert("There are no posts yet");
         }
       })
-      .catch((error) =>
-        alert(
-          "An error occured while trying to fetch the posts, please refresh the page"
-        )
-      );
+      .catch((error) => {});
   } else {
     setLoading(true);
     getPostsByHashtag(hashtag)
@@ -26,10 +22,6 @@ export default function getPosts(
         setPosts(() => data);
         setLoading(false);
       })
-      .catch((error) =>
-        alert(
-          "An error occured while trying to fetch the posts, please refresh the page"
-        )
-      );
+      .catch((error) => {});
   }
 }
