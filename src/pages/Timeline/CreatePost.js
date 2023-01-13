@@ -30,7 +30,7 @@ export default function CreatePost({ setPosts, setTrending }) {
         setText("");
         setIsProcessing(false);
         //getPosts(setPosts);
-        getTrending(setTrending);
+        //getTrending(setTrending);
       })
       .catch(() => {
         alert("Houve um erro ao publicar seu link");
