@@ -1,4 +1,4 @@
-import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { AiOutlineHeart, AiFillHeart, AiOutlineComment } from "react-icons/ai";
 import { useEffect, useState } from "react";
 import Comment from "./Comment/Comment";
 import axios from "axios";
@@ -22,6 +22,8 @@ import URL_back from "../../utils/URL_back";
 import Tooltip from "react-tooltip";
 import RepostButton from "./RepostButton/RepostButton";
 import { FaRetweet } from "react-icons/fa";
+import PostComment from "./PostComments/PostComment";
+
 
 export default function Post({ data, reload }) {
   const {
@@ -42,6 +44,7 @@ export default function Post({ data, reload }) {
   const [auxArray, setAuxArray] = useState([]);
   const [tooltip, showTooltip] = useState(true);
   const [isLiked, setIsLiked] = useState(false);
+  const [comment, setComment] = useState(false)
 
   function isAuthenticatedUserPost() {
     return JSON.parse(localStorage.user).username === username;
@@ -173,8 +176,11 @@ export default function Post({ data, reload }) {
     }
   }
 
+  console.log(comment)
+
   // RENDER
   return (
+    <>
     <Container>
       {repost_by ? (
         <RepostContainer>
@@ -215,6 +221,7 @@ export default function Post({ data, reload }) {
               )}
             </Like>
           </InfoLike>
+          <AiOutlineComment fontSize={22} color={'#fff'} onClick={()=> setComment(true)}/>
           <RepostButton re_post_times={repost_times} post_id={post_id} />
         </PhotoLikeGroup>
         <Username onClick={() => navigate(`/user/${user_id}`)}>
@@ -232,6 +239,9 @@ export default function Post({ data, reload }) {
         <Comment text={text} editModeState={editMode} update={updatePost} />
         <UrlMetadata data={{ link, title, image, description }} />
       </PostContainer>
+      {comment ? <PostComment/> : null}
     </Container>
+   
+    </>
   );
 }
