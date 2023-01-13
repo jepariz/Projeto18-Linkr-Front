@@ -8,9 +8,7 @@ export function getTrending(setTrending) {
     .then(({ data }) => {
       setTrending(() => data);
     })
-    .catch((error) =>
-      alert(
-        "An error occured while trying to fetch the trending topics, please refresh the page"
-      )
-    );
+    .catch((error) => {
+      console.log(error);
+    });
 }

@@ -1,5 +1,5 @@
 import { getPostsByHashtag } from "../../api/hashtag";
-import { getLast20Posts } from "../../api/timeline";
+import { getLast10Posts } from "../../api/timeline";
 
 export default function getPosts(
   setPosts,
@@ -7,7 +7,7 @@ export default function getPosts(
   hashtag = ""
 ) {
   if (hashtag === "") {
-    getLast20Posts()
+    getLast10Posts()
       .then(({ data }) => {
         setPosts(() => data);
         if (data.length === 0) {
@@ -23,7 +23,7 @@ export default function getPosts(
     setLoading(true);
     getPostsByHashtag(hashtag)
       .then(({ data }) => {
-        setPosts(() => data);
+        setPosts(() => data.posts);
         setLoading(false);
       })
       .catch((error) =>

@@ -29,7 +29,7 @@ export default function CreatePost({ setPosts, setTrending }) {
         setLink("");
         setText("");
         setIsProcessing(false);
-        getPosts(setPosts);
+        //getPosts(setPosts);
         getTrending(setTrending);
       })
       .catch(() => {
