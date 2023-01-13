@@ -4,9 +4,7 @@ export const PostList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
-  margin-top: 15px;
   @media (min-width: 1024px) {
-    margin-top: 40px;
   }
 `;
 
@@ -46,8 +44,11 @@ export const SubContainer = styled.div`
 `;
 
 export const LeftContainer = styled.div`
+  display: flex;
+  flex-direction: column;
   width: 100%;
   max-width: 611px;
+  gap: 20px;
 `;
 
 export const ZeroPost = styled.div`
@@ -60,4 +61,24 @@ export const ZeroPost = styled.div`
   font-weight: 700;
   font-size: 27px;
   color: #ffffff;
+`;
+
+export const UpdatePostsFromFollowed = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  background-color: #1877f2;
+  height: 61px;
+  border-radius: 16px;
+
+  :hover {
+    cursor: pointer;
+  }
+
+  p {
+    margin-right: 15px;
+    color: #fff;
+  }
 `;
